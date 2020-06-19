@@ -25,7 +25,7 @@ $ ./clean.sh
   
 Use the prisma command line utility to deploy the database to your server (this uses the configuration from _data/src/schema.prisma_).
 ```  
-$ cd data
+$ cd data/src
 $ npx prisma migrate save --experimental
 $ npx prisma migrate up --experimental
 ```
