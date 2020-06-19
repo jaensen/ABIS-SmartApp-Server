@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/events/notifications/newEntry_1_0_0",
+  "title": "NewEntry",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "owner": {
+      "type": "number"
+    },
+    "groupId": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "owner",
+    "groupId",
+    "name",
+    "data"
+  ]
+}

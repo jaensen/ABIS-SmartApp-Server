@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/references/contactDetail_1_0_0",
+  "title": "Contact detail",
+  "description": "Can be a telephone number, email address, website etc.",
+  "type": "object",
+  "properties": {
+    "medium": {
+      "type": "string",
+      "enum": [
+        "Phone",
+        "Mobile phone",
+        "Fax",
+        "Email",
+        "Url",
+        "Other"
+      ]
+    },
+    "value": { "type": "string"},
+    "comment": { "type": "string"}
+  },
+  "required": ["type", "value"]
+}

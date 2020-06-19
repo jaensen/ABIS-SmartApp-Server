@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/references/schemaId_1_0_0",
+  "title": "SchemaId",
+  "description": "Contains the '_$schemaId' attribute which is used to mark an object with a specific SchemaType.",
+  "type": "object",
+  "properties": {
+    "_$schemaId": {
+      "type": "string"
+    }
+  },
+  "required": ["_$schemaId"]
+}

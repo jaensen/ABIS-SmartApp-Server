@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/askFor_1_0_0",
+  "title": "Ask for",
+  "description": "Prompts the client to send a new Entry of the specified type (definition) to proceed with the dialog.",
+  "type": "object",
+  "properties":{
+    "next": {
+      "type": "string",
+      "description": "The type (definition) of the entry that is requested from the client."
+    },
+    "timeoutAt": {
+      "type": "string",
+      "description": "A iso formatted date/time string that specifies how long the agent will wait for a response."
+    },
+    "result": {
+      "type": "object",
+      "description": "Can contain a result from the previous request.",
+      "properties": {
+        "_$schemaId": { "type": "string" }
+      },
+      "required": [
+        "_$schemaId"
+      ]
+    }
+  },
+  "required": [
+    "next"
+  ]
+}

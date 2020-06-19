@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/authentication/signup_1_0_0",
+  "title": "Sign-up",
+  "description": "Can be sent to the 'authenticationService' to signup for a new user account.",
+  "type": "object",
+  "properties": {
+    "timezoneOffset": { "type": "number"},
+    "firstName": { "type": "string",  "minLength":  2},
+    "lastName": { "type": "string",  "minLength":  3},
+    "email": { "type": "string",  "minLength":  6},
+    "password": { "type": "string",  "minLength":  8},
+    "passwordConfirmation": { "type": "string",  "minLength":  8}
+  },
+  "required": [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "passwordConfirmation",
+    "timezoneOffset"
+  ]
+}

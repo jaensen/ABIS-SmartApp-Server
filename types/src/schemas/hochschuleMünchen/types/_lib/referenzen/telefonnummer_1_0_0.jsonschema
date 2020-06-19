@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/telefonnummer_1_0_0",
+  "type": "object",
+  "properties": {
+    "landesvorwahl": { "type": "string" },
+    "ortsvorwahl": { "type": "string" },
+    "anschlussNummer": { "type": "string" },
+    "durchwahl": { "type": "string" }
+  }
+}

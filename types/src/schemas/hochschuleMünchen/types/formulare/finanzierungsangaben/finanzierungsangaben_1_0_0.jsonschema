@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/finanzierungsangaben/finanzierungsangaben_1_0_0",
+  "type": "object",
+  "properties": {
+    "erstellungsDatum": { "type": "date" },
+    "auftragsReferenz": {
+      "type": "object",
+      "allOf": [
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/formulare/auftrag/_lib/referenzen/auftragsReferenz_1_0_0" }
+      ]
+    },
+    "finanzierung": {
+      "type": "object",
+      "allOf": [
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/kostenstelle_1_0_0" },
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/budget_1_0_0" },
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/kostenträger_1_0_0" }
+      ],
+      "properties": {
+        "zusatz": { "type": "string" }
+      }
+    },
+    "mitzeichnungIT": {
+      "type": "object",
+      "properties": {
+        "notwendig": { "type": "boolean" },
+        "neinBegründung": { "type": "string" },
+        "jaBegründung": {
+          "type": "string",
+          "enum": [
+            "Grundlage ist der im Auftrag genannte IT-Vertrag",
+            "Vergleichbare Beschaffung über Rahmenvertrag möglich"
+          ]
+        },
+        "signatur": {
+          "allOf": [
+            { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+          ]
+        }
+      }
+    },
+    "mitzeichnungAndererOrganisationseinheiten": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+        ]
+      }
+    },
+    "besteller": {
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+      ],
+      "properties": {
+        "telefon": {
+          "type": "object",
+          "allOf": [
+            { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/telefonnummer_1_0_0" }
+          ]
+        }
+      }
+    },
+    "budgetverantwortlicher": {
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+      ],
+      "properties": {
+        "telefon": {
+          "type": "object",
+          "allOf": [
+            { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/telefonnummer_1_0_0" }
+          ]
+        }
+      }
+    }
+  }
+}

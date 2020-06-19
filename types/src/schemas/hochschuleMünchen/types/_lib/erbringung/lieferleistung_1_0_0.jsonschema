@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/erbringung/lieferleistung_1_0_0",
+  "type": "object",
+  "properties": {
+    "art": {
+      "type": "string",
+      "enum": [
+        "Neuanschaffung",
+        "Ersatzbeschaffung für Altgerät",
+        "Zubehör zum Hauptgerät"
+      ]
+    },
+    "beschreibung": { "type": "string"},
+    "gerät": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/inventar/gerät_1_0_0" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/budget_1_0_0",
+  "type": "object",
+  "properties": {
+    "budgetNr": { "type": "string" },
+    "budgetName": { "type": "string" }
+  }
+}

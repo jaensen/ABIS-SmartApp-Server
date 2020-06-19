@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/verdingungsbogen/_lib/vergleichsangebot_1_0_0",
+  "type": "object",
+  "properties": {
+    "unternehmen": { "type": "string" },
+    "angebotVom": { "type": "date" },
+    "gesamtbetragInEuro": { "type": "number" },
+    "bruttoNetto": {
+      "type": "string",
+      "enum": [ "brutto", "netto" ]
+    }
+  }
+}

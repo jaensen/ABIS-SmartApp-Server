@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/auftrag/_lib/referenzen/auftragsReferenz_1_0_0",
+  "type": "object",
+  "properties": {
+    "fakultät": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/fakultätOderAbteilung_1_0_0" }
+      ]
+    },
+    "angebotVom": { "type": "string" },
+    "endsumme": { "type": "number" }
+  }
+}

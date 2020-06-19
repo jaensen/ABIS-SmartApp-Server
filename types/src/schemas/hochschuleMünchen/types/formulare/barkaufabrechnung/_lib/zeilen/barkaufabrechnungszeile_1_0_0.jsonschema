@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/barkaufabrechnung/_lib/zeilen/barkaufabrechnungszeile_1_0_0",
+  "type": "object",
+  "properties": {
+    "position": { "type": "integer" },
+    "rechnungsdatum": { "type": "date" },
+    "firma": { "type": "string" },
+    "betrag": { "type": "number" },
+    "kostenart": { "type": "string" },
+    "dienstlicherAnlass": { "type": "string" },
+    "artDerLeistung": { "type": "string" },
+    "ivsNummer": { "type": "string" },
+    "nichtErstattungsfähig": { "type": "boolean" }
+  }
+}

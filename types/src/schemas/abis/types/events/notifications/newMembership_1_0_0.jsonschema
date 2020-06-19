@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/events/notifications/newMembership_1_0_0",
+  "title": "NewMembership",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "creatorId": {
+      "type": "number"
+    },
+    "memberId": {
+      "type": "number"
+    },
+    "groupId": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "id",
+    "creatorId",
+    "memberId",
+    "groupId"
+  ]
+}

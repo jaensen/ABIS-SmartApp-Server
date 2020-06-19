@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/retry_1_0_0",
+  "title": "Retry",
+  "description": "Is sent in case of an error and prompts the client to re-do its last request. The 'lastEntry' properties contains the data that failed to process",
+  "type": "object",
+  "properties": {
+    "faultyEntry": {
+      "type": "object",
+      "description": "The data which couldn't be processed and that should be re-sent by the client.",
+      "properties": {
+        "_$schemaId": { "type": "string" }
+      },
+      "required": [
+        "_$schemaId"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "description": "The reason why the data couldn't be processed."
+    }
+  },
+  "required": [
+    "faultyEntry"
+  ]
+}

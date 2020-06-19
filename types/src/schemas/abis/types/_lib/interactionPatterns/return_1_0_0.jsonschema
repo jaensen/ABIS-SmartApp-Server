@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/return_1_0_0",
+  "title": "Return",
+  "description": "Is sent by a sub-process when it finished.",
+  "type": "object",
+  "properties": {
+    "isError": {
+      "type": "boolean",
+      "description": "Is 'true' when the sub-process ended with an error."
+    },
+    "returnFromLevel": {
+      "type": "integer",
+      "description": "Indicates how deep the current call stack is."
+    },
+    "result": {
+      "type": "object",
+      "description": "The result of the finished sub-process. If 'isError' is 'true', this might contain the reason.",
+      "properties": {
+        "_$schemaId": { "type": "string" }
+      },
+      "required": [
+        "_$schemaId"
+      ]
+    }
+  },
+  "required": [
+    "isError"
+  ]
+}

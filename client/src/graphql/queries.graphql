@@ -1,0 +1,46 @@
+query myProfile {
+    myProfile {
+        id
+        name
+        type
+        createdAt
+        groups {
+            id
+            name
+            type
+            createdAt
+        }
+        memberships {
+            group {
+                id
+                name
+                type
+                createdAt
+                owner {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}
+
+query readEntries($groupId:Int! $sort:SortOrder $after:String $first:Int) {
+    readEntries(groupId: $groupId sort: $sort after: $after first: $first) {
+        first
+        last
+        order
+        count
+        entries {
+            id
+            createdAt
+            groupId
+            name
+            data
+            owner {
+                id
+                name
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/references/name_1_0_0",
+  "title": "Name",
+  "description": "Can be either a 'Nick-', 'First'-, 'Middle'- or 'Last'-name.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "Nick",
+        "First",
+        "Middle",
+        "Last"
+      ]
+    },
+    "value": { "type": "string"}
+  },
+  "required": ["type", "value"]
+}

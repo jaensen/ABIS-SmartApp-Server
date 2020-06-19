@@ -1,0 +1,21 @@
+{
+  "name": "@abis/agents",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Daniel Janz & David Chang",
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@types/node": "^14.0.1",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
+  },
+  "dependencies": {
+    "@abis/log": "../log",
+    "@abis/interfaces": "../interfaces",
+    "@abis/types": "../types",
+    "@abis/dialog": "../dialog",
+    "@abis/events": "../events",
+    "@abis/data": "../data"
+  }
+}

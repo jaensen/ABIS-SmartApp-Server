@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/email/emailTemplate_1_0_0",
+  "title": "E-Mail Template",
+  "description": "Specifies two string fields (one for HTML and one for plaintext) which are designated for mustache email-body templates.",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "type": "string",
+      "description": "The plain text mustache template which is used to format the subject."
+    },
+    "plainText": {
+      "type": "string",
+      "description": "The plain text mustache template which is used to generate the plaintext body of an email."
+    },
+    "html": {
+      "type": "string",
+      "description": "The HTML mustache template which is used to generate the HTML body of an email."
+    }
+  },
+  "required": [
+    "subject",
+    "plainText"
+  ]
+}

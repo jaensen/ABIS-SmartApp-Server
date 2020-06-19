@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/barkaufabrechnung/barkaufabrechnung_1_0_0",
+  "type": "object",
+  "properties": {
+    "adresse": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/adresse_1_0_0" }
+      ]
+    },
+    "kontoverbindung": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/kontoverbindung_1_0_0" }
+      ]
+    },
+    "zeilen": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/barkaufabrechnung/_lib/zeilen/barkaufabrechnungszeile_1_0_0" }
+        ]
+      }
+    },
+    "unterschriftAngabenKorrekt": {
+      "type": "object",
+      "allOf": [
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+      ]
+    },
+    "bearbeitungsvermerke": {
+      "type": "object",
+      "datum": { "type": "date" },
+      "sachlichRichtigFestgestellt": { "type": "string" },
+      "finanzierung": {
+        "type": "string",
+        "enum": [ "Globalbudget", "Studienzuschüsse", "Drittmittel", "Ausbauplanung", "Sonstiges" ]
+      },
+      "budgetstelle": { "type": "string" },
+      "kostenstelle": { "type": "string" },
+      "unterschriftBudgetverantwortlicher": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/signatur_1_0_0" }
+        ]
+      }
+    }
+  }
+}

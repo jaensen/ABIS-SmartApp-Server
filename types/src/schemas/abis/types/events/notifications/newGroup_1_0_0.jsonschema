@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/events/notifications/newGroup_1_0_0",
+  "title": "NewGroup",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "owner": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Stash",
+        "Channel",
+        "Room",
+        "Share"
+      ]
+    },
+    "volatile": {
+      "type": "boolean"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "owner",
+    "name",
+    "type",
+    "volatile"
+  ]
+}

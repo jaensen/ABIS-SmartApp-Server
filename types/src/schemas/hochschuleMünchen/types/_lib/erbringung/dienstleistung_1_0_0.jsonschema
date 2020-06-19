@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/erbringung/dienstleistung_1_0_0",
+  "type": "object",
+  "properties": {
+    "art": {
+      "type": "string",
+      "enum": [
+        "Beratung",
+        "Schulung",
+        "Wartung/Instandhaltung",
+        "sonstige Dienst-/Werkleistung",
+        "Reparatur eines Geräts"
+      ]
+    },
+    "beschreibung": { "type": "string"},
+    "gerät": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/inventar/gerät_1_0_0" }
+      ]
+    }
+  }
+}

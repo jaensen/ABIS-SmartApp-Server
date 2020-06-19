@@ -1,0 +1,47 @@
+subscription newChannel
+{
+    newChannel {
+        id
+        createdAt
+        name
+        type
+        owner {
+            id
+            name
+            type
+            createdAt
+        }
+        members {
+            member {
+                id
+                name
+                type
+                createdAt
+            }
+        }
+    }
+}
+
+subscription newEntry
+{
+    newEntry {
+        id
+        groupId
+        type
+        createdAt
+        name
+        owner {
+            id
+            name
+            type
+            createdAt
+        }
+        group {
+            id
+            createdAt
+            type
+            name
+        }
+        data
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/authentication/login_1_0_0",
+  "title": "Login",
+  "description": "Can be sent to the 'authenticationService' to login. If the login succeeds, the 'authorized' response with a 'jwt'-token will be sent as response.",
+  "type": "object",
+  "properties": {
+    "email": { "type": "string"},
+    "password": { "type": "string"},
+    "sub": { "type": "string"}
+  },
+  "required": [
+    "email",
+    "password"
+  ]
+}

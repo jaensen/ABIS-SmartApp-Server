@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/events/commands/createChannel_1_0_0",
+  "title": "CreateChannel",
+  "type": "object",
+  "properties": {
+    "$jwt": {
+      "type": "string"
+    },
+    "toAgentId": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "volatile": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "$jwt",
+    "toAgentId",
+    "name",
+    "volatile"
+  ]
+}

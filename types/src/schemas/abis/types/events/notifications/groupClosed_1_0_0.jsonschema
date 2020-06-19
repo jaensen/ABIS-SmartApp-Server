@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/events/notifications/groupClosed_1_0_0",
+  "title": "GroupClosed",
+  "type": "object",
+  "properties": {
+    "groupId": {
+      "type": "number"
+    },
+    "groupOwner": {
+      "type": "number"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    }
+  },
+  "required": [
+    "groupId",
+    "groupOwner",
+    "members"
+  ]
+}

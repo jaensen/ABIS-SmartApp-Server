@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/verdingungsbogen/verdingungsbogen_1_0_0",
+  "type": "object",
+  "properties": {
+    "bezeichnungDesBeschaffungsgenstandes": { "type": "string" },
+    "fakultätOderAbteilung": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/fakultätOderAbteilung_1_0_0" }
+      ]
+    },
+    "artDerLeistung": {
+      "type": "object",
+      "properties": {
+        "oneOf": [
+          { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/erbringung/dienstleistung_1_0_0" },
+          { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/erbringung/lieferleistung_1_0_0" }
+        ]
+      }
+    },
+    "vergleichsangebote": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          { "$ref":"abis-schema://hochschuleMünchen@abis.internal/types/formulare/verdingungsbogen/_lib/vergleichsangebot_1_0_0" }
+        ]
+      }
+    },
+    "vergabekriterium": {
+      "type": "string",
+      "enum": [
+        "günstigstes Angebot",
+        "wirtschaftlichstes Angebot",
+        "nur ein Anbieter"
+      ]
+    },
+    "begründung": { "type": "string" }
+  }
+}

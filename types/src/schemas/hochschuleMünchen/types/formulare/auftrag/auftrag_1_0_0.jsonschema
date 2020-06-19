@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/formulare/auftrag/auftrag_1_0_0",
+  "type": "object",
+  "properties": {
+    "erstellungsDatum": { "type": "date" },
+    "auftragsReferenz": {
+      "type": "object",
+      "allOf": [
+        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/formulare/auftrag/_lib/referenzen/auftragsReferenz_1_0_0" }
+      ]
+    },
+    "bezugAufAngebot": {
+      "type": "object",
+      "properties": {
+        "angebotNr": { "type": "date" }
+      }
+    },
+    "zeilen": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/formulare/auftrag/_lib/zeilen/auftragsZeile_1_0_0" }
+        ]
+      }
+    },
+    "angabenZumAuftrag": {
+      "type": "object",
+      "properties": {
+        "vertragsende": { "type": "date" },
+        "auftragsNummer": { "type": "string" }
+      }
+    },
+    "lieferanschrift": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/adresse_1_0_0" }
+      ]
+    },
+    "liefervermerk": { "type": "string" }
+  }
+}

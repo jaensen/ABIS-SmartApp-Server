@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/adresse_1_0_0",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "vorname": { "type": "string" },
+    "plz": { "type": "string" },
+    "ort": { "type": "string" },
+    "straße": { "type": "string" },
+    "fakultätOderAbteilung": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/fakultätOderAbteilung_1_0_0" }
+      ]
+    },
+    "telefon": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "abis-schema://hochschuleMünchen@abis.internal/types/_lib/referenzen/telefonnummer_1_0_0" }
+      ]
+    },
+    "email": { "type": "string" }
+  }
+}

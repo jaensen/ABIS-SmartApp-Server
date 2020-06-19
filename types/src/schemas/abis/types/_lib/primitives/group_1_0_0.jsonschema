@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/_lib/primitives/group_1_0_0",
+  "title": "Group",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "owner": {
+      "type": "number"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Stash",
+        "Channel",
+        "Room",
+        "Share"
+      ]
+    },
+    "volatile": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "implementation"
+  ]
+}

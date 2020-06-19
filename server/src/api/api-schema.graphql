@@ -1,0 +1,135 @@
+scalar DateTime
+scalar Json
+
+interface ActionResponse {
+    success: Boolean!
+    errorMessage: String
+}
+
+type CreateSessionResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+    jwt:String!
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+type EntriesPage {
+    first:String!
+    last:String!
+    order:SortOrder!
+    count: Int!
+    entries:[Entry!]!
+}
+
+enum AgentType {
+    Profile
+    Companion
+    Singleton
+}
+
+type Agent {
+    id: Int!
+    createdAt: DateTime!
+    type: AgentType!
+    timezoneOffset: Float
+    name: String!
+    groups: [Group!]
+    memberships: [Membership!]
+}
+
+type Membership {
+    id: Int!
+    createdAt: DateTime!
+    member: Agent!
+    group: Group!
+}
+
+enum GroupType {
+    Stash
+    Share
+    Channel
+    Room
+}
+
+type Group {
+    id: Int!
+    createdAt: DateTime!
+    volatile:Boolean!
+    ownerId: Int!
+    name:String!
+    type: GroupType!
+    owner: Agent
+    members: [Membership!]
+    entries(sort:SortOrder after:String first:Int):EntriesPage
+}
+
+type CreateChannelResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+    channel: Group
+}
+
+enum EntryType {
+    Empty
+    Data
+    Definition
+}
+
+input CreateEntryInput {
+    groupId: Int!
+    type: EntryType!
+    name: String!
+    data: Json
+}
+
+type Entry {
+    id: Int!
+    createdAt: DateTime!
+    ownerId: Int!
+    owner: Agent
+    groupId: Int!
+    group: Group
+    type: EntryType!
+    name: String!
+    data: Json
+}
+
+type CreateEntryResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+    entry: Entry
+}
+
+type DeleteEntryResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+}
+
+type Server {
+    timezoneOffset:Float!
+    systemAgents:[Agent!]!
+}
+
+type Query {
+    myProfile: Agent!
+    myServer: Server!
+
+    readDefinitions(groupId:Int!): [Entry!]!
+    readEntries(groupId:Int! sort:SortOrder after:String first:Int):EntriesPage
+}
+
+type Mutation {
+    createAnonymousSession: CreateSessionResponse!
+    createChannel(toAgentId:Int! volatile:Boolean!): CreateChannelResponse!
+    createEntry(createEntryInput:CreateEntryInput!): CreateEntryResponse!
+
+    deleteEntry(entryId:Int!): DeleteEntryResponse!
+}
+
+type Subscription {
+    event : Json
+}

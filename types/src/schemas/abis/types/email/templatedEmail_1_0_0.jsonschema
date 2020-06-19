@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://abis@abis.internal/types/email/templatedEmail_1_0_0",
+  "title": "TemplatedEMail",
+  "description": "Defines all fields necessary to send an email.",
+  "type": "object",
+  "properties": {
+    "from": {
+      "type": "object",
+      "description": "The sender of the email. This can be either an agent id or an actual email address",
+      "oneOf": [{
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      }, {
+        "properties": {
+          "agentId": {
+            "type": "integer"
+          }
+        }
+      }]
+    },
+    "to": {
+      "type": "array",
+      "description": "The list of recipient addresses.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cc": {
+      "type": "array",
+      "description": "The list of CC recipient addresses.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "templateName": {
+      "type": "string",
+      "description": "The name of the template that should be used to generate the email."
+    },
+    "data": {
+      "type": "object",
+      "description": "Contains the data that will be fed into the template engine to create the actual email body."
+    }
+  },
+  "required": [
+    "from",
+    "to",
+    "template",
+    "data"
+  ]
+}
