@@ -55,6 +55,13 @@ npm install
 npm run generate
 npx tsc
 
+cd ../apps/abis || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+npx tsc
+
+
 cd ../client || exit
 rm -f package-lock.json
 rm -r -f dist
