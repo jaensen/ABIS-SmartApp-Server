@@ -13,8 +13,198 @@ import {NewEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/notific
 import {CreateEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/createEntry_1_0_0";
 import {CloseChannel_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/closeChannel_1_0_0";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
+import {ApolloLink, split} from "apollo-link";
+import ApolloClient, {DefaultOptions} from "apollo-client";
+import {InMemoryCache, NormalizedCacheObject} from "apollo-cache-inmemory";
+import {HttpLink} from "apollo-link-http";
+import {WebSocketLink} from "apollo-link-ws";
+import {getMainDefinition} from 'apollo-utilities';
+import ws from "ws";
+import {fetch} from 'cross-fetch'
+import {Helper} from "@abis/interfaces/dist/helper";
+import {
+    CreateAnonymousSession,
+    CreateAnonymousSessionMutation,
+    CreateAnonymousSessionMutationVariables, Exact,
+    NewEvent,
+    NewEventSubscriptionVariables, Send, SendMutation, SendMutationVariables
+} from "./generated/abis-api";
 
 export type EventFilter<TEvent extends SchemaType> = (e: TEvent) => boolean;
+
+export class ClientProxy
+{
+    private readonly _host: string;
+    private readonly _defaultOptions: DefaultOptions;
+
+    private _link?: ApolloLink;
+    private _client?: ApolloClient<NormalizedCacheObject>;
+    private _session?: Session_1_0_0;
+    private _initialized = false;
+    private _eventsSubscription?: ZenObservable.Subscription;
+
+    private _clientEventBroker = new EventBroker();
+
+    private get client(): ApolloClient<NormalizedCacheObject>
+    {
+        if (!this._client)
+            throw new Error("Call connect() first!");
+
+        return this._client;
+    }
+
+    public get session(): Session_1_0_0
+    {
+        if (!this._session)
+            throw new Error("Call connect() first!");
+
+        return this._session;
+    }
+
+    public constructor(host: string)
+    {
+        this._host = host;
+
+        this._defaultOptions = {
+            watchQuery: {
+                fetchPolicy: 'no-cache',
+                errorPolicy: 'ignore',
+            },
+            query: {
+                fetchPolicy: 'no-cache',
+                errorPolicy: 'all',
+            },
+        };
+    }
+
+    public async connect()
+    {
+        const now = new Date();
+
+        if (this._initialized && this._client && (this._session?.validTo ?? now) > now)
+        {
+            // Session still valid
+            console.warn("Called connect() while the current session is still valid.")
+            return;
+        }
+
+        const httpLink = new HttpLink({
+            fetch: fetch,
+            uri: 'http://' + this._host,
+            headers: {
+                authorization: this._session?.jwt
+            }
+        });
+
+        const connectionParams = {
+            authorization: this._session?.jwt,
+            clientTimezoneOffset: new Date().getTimezoneOffset()
+        };
+
+        const subscriptionLink = new WebSocketLink({
+            webSocketImpl: ws,
+            uri: 'ws://' + this._host + '/graphql',
+            options: {
+                reconnect: true,
+                connectionParams: connectionParams
+            }
+        });
+
+        this._link = split(
+            ({query}) =>
+            {
+                const {kind, operation} = <any>getMainDefinition(query);
+                return kind === 'OperationDefinition' && operation === 'subscription';
+            },
+            subscriptionLink,
+            httpLink
+        );
+
+        this._client = new ApolloClient({
+            link: this._link,
+            cache: new InMemoryCache(),
+            defaultOptions: this._defaultOptions
+        });
+
+        if (this._session !== undefined)
+        {
+            await this.subscribeToEvents();
+
+            this._initialized = true;
+            console.log("Connected. Token is: " + this._session?.jwt);
+            return;
+        }
+
+        this._session = await this.createAnonymousSession();
+        console.log("Got the session. Initializing an authorized connection.");
+
+        await this.connect();
+    }
+
+    private async subscribeToEvents()
+    {
+        if (!this._session)
+            throw new Error("No session. Call connect() first.");
+
+        const session = this._session;
+
+        return new Promise<void>((resolve, reject) =>
+        {
+            this._eventsSubscription = this.client.subscribe<NewEventSubscriptionVariables>({
+                query: NewEvent
+            }).subscribe(next =>
+            {
+                const newEvent = <SchemaType>(<any>next.data).newEntry;
+                this._clientEventBroker.publishDirect(session.owner, newEvent);
+            });
+
+            resolve();
+        });
+    }
+
+    private async createAnonymousSession() : Promise<Session_1_0_0>
+    {
+        if (!this._client)
+            throw new Error("Call connect() first.");
+
+        const session = await this._client.mutate<CreateAnonymousSessionMutation, CreateAnonymousSessionMutationVariables>({
+            mutation: CreateAnonymousSession
+        });
+
+        if (!session.data?.createAnonymousSession.success)
+        {
+            throw new Error("Couldn't create a session at " + this._host);
+        }
+
+        return await Helper.sessionFromJwt(session.data.createAnonymousSession.jwt);
+    }
+
+    subscribeTo()
+    {
+        if (!this._session)
+            throw new Error("Call connect() first.");
+
+        return this._clientEventBroker.subscribe(this._session.owner);
+    }
+
+    async publish(event: SchemaType)
+    {
+        if (!this._client)
+            throw new Error("Call connect() first.");
+
+        const result = await this._client.mutate<SendMutation, SendMutationVariables>({
+            mutation: Send,
+            variables: {
+                event: event
+            }
+        });
+
+        if (!result.data?.send?.success)
+        {
+            throw new Error("Couldn't send event: " + event._$schemaId);
+        }
+    }
+}
 
 export class Client
 {
@@ -22,7 +212,7 @@ export class Client
     private _session?: Session_1_0_0;
     private _events?: Emitter<SchemaType>;
     private _clientEventBroker = new EventBroker();
-    private _stopRequest =  false;
+    private _stopRequest = false;
 
     constructor(proxy: ClientProxy)
     {
@@ -36,22 +226,27 @@ export class Client
             throw new Error("Already connected.");
         }
 
-        this._session = await this._proxy.createAnonymousSession();
-        this._events = this._proxy.subscribeTo(this._session.owner);
+        this._session = this._proxy.session;
+        this._events = this._proxy.subscribeTo();
 
         this.run();
     }
 
-    disconnect() {
+    disconnect()
+    {
         this._stopRequest = true;
     }
 
-    private async run() {
-        if (!this._events) {
+    private async run()
+    {
+        if (!this._events)
+        {
             throw new Error("Call connect() first.")
         }
-        for await(let event of this._events) {
-            if (this._stopRequest) {
+        for await(let event of this._events)
+        {
+            if (this._stopRequest)
+            {
                 this._stopRequest = false;
                 break;
             }
@@ -63,9 +258,10 @@ export class Client
 
     private readonly _dialogs: { [withAgentId: number]: IDuplexChannel } = {};
 
-    async newDialog(withAgentId: number, volatile:boolean, implementation:string)
+    async newDialog(withAgentId: number, volatile: boolean, implementation: string)
     {
-        if (!this._session) {
+        if (!this._session)
+        {
             throw new Error("Call connect() first.")
         }
 
@@ -82,7 +278,7 @@ export class Client
      * and the specified other agent.
      * @param withAgentId The other agent.
      */
-    async newDuplexChannel(withAgentId:number, volatile:boolean)
+    async newDuplexChannel(withAgentId: number, volatile: boolean)
     {
         if (!this._session?.jwt || !this._events)
         {
@@ -90,7 +286,7 @@ export class Client
         }
 
         // Create out-channel
-        const createOutChannel = <CreateChannel_1_0_0> {
+        const createOutChannel = <CreateChannel_1_0_0>{
             _$schemaId: SchemaTypes.CreateChannel_1_0_0,
             $jwt: this._session?.jwt,
             toAgentId: withAgentId,
@@ -100,11 +296,13 @@ export class Client
 
         const self = this;
 
-        return new Promise<IDuplexChannel>(async (resolve, reject) => {
+        return new Promise<IDuplexChannel>(async (resolve, reject) =>
+        {
             this.receive<NewGroup_1_0_0>(
                 SchemaTypes.NewGroup_1_0_0,
                 e => e.owner == this._session?.owner)
-                .then(async createdOutChannel => {
+                .then(async createdOutChannel =>
+                {
                     Log.log("Client", "Created 'out' channel", createOutChannel);
 
                     const inChannelMembership = await this.receive<NewMembership_1_0_0>(
@@ -117,13 +315,14 @@ export class Client
                         inChannelMembership
                     }
                 })
-                .then(previous => {
+                .then(previous =>
+                {
                     Log.log("Client", "Received 'in' channel membership", previous.inChannelMembership);
 
                     const allClientEvents = this._clientEventBroker.subscribe(0);
                     const inChannelEvents = from(allClientEvents)
                         .pipe(
-                            filter((event:SchemaType) =>
+                            filter((event: SchemaType) =>
                                 event._$schemaId == SchemaTypes.NewEntry_1_0_0
                                 && event.groupId == previous.inChannelMembership.groupId)
                         );
@@ -134,7 +333,7 @@ export class Client
                         inChannelEvents: inChannelEvents,
                         ownAgentId: self._session?.owner,
                         partnerAgentId: withAgentId,
-                        async send(name:string, data:SchemaType): Promise<NewEntry_1_0_0>
+                        async send(name: string, data: SchemaType): Promise<NewEntry_1_0_0>
                         {
                             const createEntry = <CreateEntry_1_0_0>{
                                 _$schemaId: SchemaTypes.CreateEntry_1_0_0,
@@ -155,7 +354,7 @@ export class Client
                         async close()
                         {
                             // Send a CloseChannel_1_0_0 message to my agent
-                            await self.send(<CloseChannel_1_0_0> {
+                            await self.send(<CloseChannel_1_0_0>{
                                 _$schemaId: SchemaTypes.CloseChannel_1_0_0,
                                 $jwt: self._session?.jwt,
                                 channelId: previous.createdOutChannel.id
@@ -202,7 +401,8 @@ export class Client
             {
                 for await (let event of allEvents)
                 {
-                    if (event._$schemaId == eventType && eventFilter(<T>event)) {
+                    if (event._$schemaId == eventType && eventFilter(<T>event))
+                    {
                         resolve(<T>event);
                         return;
                     }
@@ -217,8 +417,9 @@ export class Client
 
         try
         {
-            const candidates = [ receivedEvent ];
-            if (timeoutMs > 0) {
+            const candidates = [receivedEvent];
+            if (timeoutMs > 0)
+            {
                 candidates.push(this.newTimeout<T>(timeoutMs));
             }
             return await Promise.race(candidates);

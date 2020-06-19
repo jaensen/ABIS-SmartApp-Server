@@ -15,18 +15,6 @@ export type Scalars = {
 
 
 
-export type ActionResponse = {
-  success: Scalars['Boolean'];
-  errorMessage?: Maybe<Scalars['String']>;
-};
-
-export type CreateSessionResponse = ActionResponse & {
-  __typename?: 'CreateSessionResponse';
-  success: Scalars['Boolean'];
-  errorMessage?: Maybe<Scalars['String']>;
-  jwt: Scalars['String'];
-};
-
 export enum SortOrder {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -93,25 +81,11 @@ export type GroupEntriesArgs = {
   first?: Maybe<Scalars['Int']>;
 };
 
-export type CreateChannelResponse = ActionResponse & {
-  __typename?: 'CreateChannelResponse';
-  success: Scalars['Boolean'];
-  errorMessage?: Maybe<Scalars['String']>;
-  channel?: Maybe<Group>;
-};
-
 export enum EntryType {
   Empty = 'Empty',
   Data = 'Data',
   Definition = 'Definition'
 }
-
-export type CreateEntryInput = {
-  groupId: Scalars['Int'];
-  type: EntryType;
-  name: Scalars['String'];
-  data?: Maybe<Scalars['Json']>;
-};
 
 export type Entry = {
   __typename?: 'Entry';
@@ -124,19 +98,6 @@ export type Entry = {
   type: EntryType;
   name: Scalars['String'];
   data?: Maybe<Scalars['Json']>;
-};
-
-export type CreateEntryResponse = ActionResponse & {
-  __typename?: 'CreateEntryResponse';
-  success: Scalars['Boolean'];
-  errorMessage?: Maybe<Scalars['String']>;
-  entry?: Maybe<Entry>;
-};
-
-export type DeleteEntryResponse = ActionResponse & {
-  __typename?: 'DeleteEntryResponse';
-  success: Scalars['Boolean'];
-  errorMessage?: Maybe<Scalars['String']>;
 };
 
 export type Server = {
@@ -166,33 +127,38 @@ export type QueryReadEntriesArgs = {
   first?: Maybe<Scalars['Int']>;
 };
 
+export type ActionResponse = {
+  success: Scalars['Boolean'];
+  errorMessage?: Maybe<Scalars['String']>;
+};
+
+export type CreateSessionResponse = ActionResponse & {
+  __typename?: 'CreateSessionResponse';
+  success: Scalars['Boolean'];
+  errorMessage?: Maybe<Scalars['String']>;
+  jwt: Scalars['String'];
+};
+
+export type SendResponse = ActionResponse & {
+  __typename?: 'SendResponse';
+  success: Scalars['Boolean'];
+  errorMessage?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAnonymousSession: CreateSessionResponse;
-  createChannel: CreateChannelResponse;
-  createEntry: CreateEntryResponse;
-  deleteEntry: DeleteEntryResponse;
+  send?: Maybe<SendResponse>;
 };
 
 
-export type MutationCreateChannelArgs = {
-  toAgentId: Scalars['Int'];
-  volatile: Scalars['Boolean'];
-};
-
-
-export type MutationCreateEntryArgs = {
-  createEntryInput: CreateEntryInput;
-};
-
-
-export type MutationDeleteEntryArgs = {
-  entryId: Scalars['Int'];
+export type MutationSendArgs = {
+  event: Scalars['Json'];
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  event?: Maybe<Scalars['Json']>;
+  event: Scalars['Json'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -271,12 +237,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   Json: ResolverTypeWrapper<Scalars['Json']>,
-  ActionResponse: ResolversTypes['CreateSessionResponse'] | ResolversTypes['CreateChannelResponse'] | ResolversTypes['CreateEntryResponse'] | ResolversTypes['DeleteEntryResponse'],
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  CreateSessionResponse: ResolverTypeWrapper<CreateSessionResponse>,
   SortOrder: SortOrder,
   EntriesPage: ResolverTypeWrapper<EntriesPage>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   AgentType: AgentType,
   Agent: ResolverTypeWrapper<Agent>,
@@ -284,14 +247,14 @@ export type ResolversTypes = ResolversObject<{
   Membership: ResolverTypeWrapper<Membership>,
   GroupType: GroupType,
   Group: ResolverTypeWrapper<Group>,
-  CreateChannelResponse: ResolverTypeWrapper<CreateChannelResponse>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   EntryType: EntryType,
-  CreateEntryInput: CreateEntryInput,
   Entry: ResolverTypeWrapper<Entry>,
-  CreateEntryResponse: ResolverTypeWrapper<CreateEntryResponse>,
-  DeleteEntryResponse: ResolverTypeWrapper<DeleteEntryResponse>,
   Server: ResolverTypeWrapper<Server>,
   Query: ResolverTypeWrapper<{}>,
+  ActionResponse: ResolversTypes['CreateSessionResponse'] | ResolversTypes['SendResponse'],
+  CreateSessionResponse: ResolverTypeWrapper<CreateSessionResponse>,
+  SendResponse: ResolverTypeWrapper<SendResponse>,
   Mutation: ResolverTypeWrapper<{}>,
   Subscription: ResolverTypeWrapper<{}>,
 }>;
@@ -300,12 +263,9 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   DateTime: Scalars['DateTime'],
   Json: Scalars['Json'],
-  ActionResponse: ResolversParentTypes['CreateSessionResponse'] | ResolversParentTypes['CreateChannelResponse'] | ResolversParentTypes['CreateEntryResponse'] | ResolversParentTypes['DeleteEntryResponse'],
-  Boolean: Scalars['Boolean'],
-  String: Scalars['String'],
-  CreateSessionResponse: CreateSessionResponse,
   SortOrder: SortOrder,
   EntriesPage: EntriesPage,
+  String: Scalars['String'],
   Int: Scalars['Int'],
   AgentType: AgentType,
   Agent: Agent,
@@ -313,14 +273,14 @@ export type ResolversParentTypes = ResolversObject<{
   Membership: Membership,
   GroupType: GroupType,
   Group: Group,
-  CreateChannelResponse: CreateChannelResponse,
+  Boolean: Scalars['Boolean'],
   EntryType: EntryType,
-  CreateEntryInput: CreateEntryInput,
   Entry: Entry,
-  CreateEntryResponse: CreateEntryResponse,
-  DeleteEntryResponse: DeleteEntryResponse,
   Server: Server,
   Query: {},
+  ActionResponse: ResolversParentTypes['CreateSessionResponse'] | ResolversParentTypes['SendResponse'],
+  CreateSessionResponse: CreateSessionResponse,
+  SendResponse: SendResponse,
   Mutation: {},
   Subscription: {},
 }>;
@@ -332,19 +292,6 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Json'], any> {
   name: 'Json'
 }
-
-export type ActionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActionResponse'] = ResolversParentTypes['ActionResponse']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'CreateSessionResponse' | 'CreateChannelResponse' | 'CreateEntryResponse' | 'DeleteEntryResponse', ParentType, ContextType>,
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-}>;
-
-export type CreateSessionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateSessionResponse'] = ResolversParentTypes['CreateSessionResponse']> = ResolversObject<{
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  jwt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
 
 export type EntriesPageResolvers<ContextType = any, ParentType extends ResolversParentTypes['EntriesPage'] = ResolversParentTypes['EntriesPage']> = ResolversObject<{
   first?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -387,13 +334,6 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export type CreateChannelResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateChannelResponse'] = ResolversParentTypes['CreateChannelResponse']> = ResolversObject<{
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  channel?: Resolver<Maybe<ResolversTypes['Group']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
 export type EntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Entry'] = ResolversParentTypes['Entry']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
@@ -404,19 +344,6 @@ export type EntryResolvers<ContextType = any, ParentType extends ResolversParent
   type?: Resolver<ResolversTypes['EntryType'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   data?: Resolver<Maybe<ResolversTypes['Json']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type CreateEntryResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateEntryResponse'] = ResolversParentTypes['CreateEntryResponse']> = ResolversObject<{
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type DeleteEntryResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteEntryResponse'] = ResolversParentTypes['DeleteEntryResponse']> = ResolversObject<{
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -433,32 +360,47 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   readEntries?: Resolver<Maybe<ResolversTypes['EntriesPage']>, ParentType, ContextType, RequireFields<QueryReadEntriesArgs, 'groupId'>>,
 }>;
 
+export type ActionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActionResponse'] = ResolversParentTypes['ActionResponse']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'CreateSessionResponse' | 'SendResponse', ParentType, ContextType>,
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+}>;
+
+export type CreateSessionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateSessionResponse'] = ResolversParentTypes['CreateSessionResponse']> = ResolversObject<{
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  jwt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type SendResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SendResponse'] = ResolversParentTypes['SendResponse']> = ResolversObject<{
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createAnonymousSession?: Resolver<ResolversTypes['CreateSessionResponse'], ParentType, ContextType>,
-  createChannel?: Resolver<ResolversTypes['CreateChannelResponse'], ParentType, ContextType, RequireFields<MutationCreateChannelArgs, 'toAgentId' | 'volatile'>>,
-  createEntry?: Resolver<ResolversTypes['CreateEntryResponse'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'createEntryInput'>>,
-  deleteEntry?: Resolver<ResolversTypes['DeleteEntryResponse'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'entryId'>>,
+  send?: Resolver<Maybe<ResolversTypes['SendResponse']>, ParentType, ContextType, RequireFields<MutationSendArgs, 'event'>>,
 }>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  event?: SubscriptionResolver<Maybe<ResolversTypes['Json']>, "event", ParentType, ContextType>,
+  event?: SubscriptionResolver<ResolversTypes['Json'], "event", ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   DateTime?: GraphQLScalarType,
   Json?: GraphQLScalarType,
-  ActionResponse?: ActionResponseResolvers,
-  CreateSessionResponse?: CreateSessionResponseResolvers<ContextType>,
   EntriesPage?: EntriesPageResolvers<ContextType>,
   Agent?: AgentResolvers<ContextType>,
   Membership?: MembershipResolvers<ContextType>,
   Group?: GroupResolvers<ContextType>,
-  CreateChannelResponse?: CreateChannelResponseResolvers<ContextType>,
   Entry?: EntryResolvers<ContextType>,
-  CreateEntryResponse?: CreateEntryResponseResolvers<ContextType>,
-  DeleteEntryResponse?: DeleteEntryResponseResolvers<ContextType>,
   Server?: ServerResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  ActionResponse?: ActionResponseResolvers,
+  CreateSessionResponse?: CreateSessionResponseResolvers<ContextType>,
+  SendResponse?: SendResponseResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
 }>;

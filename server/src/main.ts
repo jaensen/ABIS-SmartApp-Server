@@ -24,6 +24,7 @@ export class Main
             context: ConnectionContext.create,
             typeDefs: apiSchemaTypeDefs,
             resolvers: {
+                Mutation: this._apolloResolvers.mutationResolvers,
                 Subscription: this._apolloResolvers.subscriptionResolvers
             }
         });

@@ -7,3 +7,4 @@ export class AuthenticationAgent extends DialogAgent
         return "";
     }
 }
+export const Class = AuthenticationAgent;

@@ -22,6 +22,7 @@
   "dependencies": {
     "@abis/types": "../types",
     "@abis/interfaces": "../interfaces",
+    "@abis/dialog": "../dialog",
     "@abis/log": "../log",
     "@abis/events": "../events",
     "ix": "^3.0.2",

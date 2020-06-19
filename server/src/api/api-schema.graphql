@@ -1,17 +1,6 @@
 scalar DateTime
 scalar Json
 
-interface ActionResponse {
-    success: Boolean!
-    errorMessage: String
-}
-
-type CreateSessionResponse implements ActionResponse {
-    success: Boolean!
-    errorMessage: String
-    jwt:String!
-}
-
 enum SortOrder {
     ASC
     DESC
@@ -67,23 +56,10 @@ type Group {
     entries(sort:SortOrder after:String first:Int):EntriesPage
 }
 
-type CreateChannelResponse implements ActionResponse {
-    success: Boolean!
-    errorMessage: String
-    channel: Group
-}
-
 enum EntryType {
     Empty
     Data
     Definition
-}
-
-input CreateEntryInput {
-    groupId: Int!
-    type: EntryType!
-    name: String!
-    data: Json
 }
 
 type Entry {
@@ -96,17 +72,6 @@ type Entry {
     type: EntryType!
     name: String!
     data: Json
-}
-
-type CreateEntryResponse implements ActionResponse {
-    success: Boolean!
-    errorMessage: String
-    entry: Entry
-}
-
-type DeleteEntryResponse implements ActionResponse {
-    success: Boolean!
-    errorMessage: String
 }
 
 type Server {
@@ -122,14 +87,27 @@ type Query {
     readEntries(groupId:Int! sort:SortOrder after:String first:Int):EntriesPage
 }
 
-type Mutation {
-    createAnonymousSession: CreateSessionResponse!
-    createChannel(toAgentId:Int! volatile:Boolean!): CreateChannelResponse!
-    createEntry(createEntryInput:CreateEntryInput!): CreateEntryResponse!
+interface ActionResponse {
+    success: Boolean!
+    errorMessage: String
+}
 
-    deleteEntry(entryId:Int!): DeleteEntryResponse!
+type CreateSessionResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+    jwt:String!
+}
+
+type SendResponse implements ActionResponse {
+    success: Boolean!
+    errorMessage: String
+}
+
+type Mutation {
+    createAnonymousSession : CreateSessionResponse!
+    send(event:Json!) : SendResponse
 }
 
 type Subscription {
-    event : Json
+    event : Json!
 }

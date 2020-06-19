@@ -6,6 +6,7 @@ import {Session} from "./types/session";
 import {IEventPublisher} from "@abis/interfaces/dist/eventPublisher";
 import {Log} from "@abis/log/dist/log";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
+import {Helper} from "@abis/interfaces/dist/helper";
 
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -20,27 +21,11 @@ export class SessionRepo
         this._agents = agents;
     }
 
-    public static async sessionFromJwt(jwt: string) : Promise<Session_1_0_0>
-    {
-        jsonwebtoken.verify(jwt, "4"); // TODO: Get jwt secret from config
-        const decodedPayload = jsonwebtoken.decode(jwt);
-
-        return <Session_1_0_0> {
-            _$schemaId: SchemaTypes.Session_1_0_0,
-            id: decodedPayload.jti,
-            validTo: new Date(decodedPayload.exp * 1000).toJSON(),
-            createdAt: new Date(decodedPayload.iat * 1000).toJSON(),
-            owner: decodedPayload.sub,
-            timezoneOffset: decodedPayload.timezoneOffset,
-            jwt: jwt
-        };
-    }
-
     async findSessionByJwt(jwt:string) :Promise<Session_1_0_0|undefined>
     {
         try
         {
-            const jwtData = await SessionRepo.sessionFromJwt(jwt);
+            const jwtData = await Helper.sessionFromJwt(jwt);
             const session = await prisma.session.findOne({
                 where: {
                     id: jwtData.id
@@ -48,7 +33,11 @@ export class SessionRepo
             });
 
             if (!session)
-                return undefined;
+                return undefined; // TODO: Log warning
+
+            const now = new Date();
+            if (session.validTo <= now || session.loggedOutAt || session.timedOutAt || session.revokedAt)
+                return undefined; // TODO: Log warning
 
             return <Session_1_0_0> {
                 _$schemaId: SchemaTypes.Session_1_0_0,
@@ -129,7 +118,14 @@ export class SessionRepo
             }
         });
 
-        const jwt = SessionRepo.sessionToJwt(newSession);
+        const jwt = Helper.sessionToJwt(<Session_1_0_0> {
+            _$schemaId: SchemaTypes.Session_1_0_0,
+            id: newSession.id,
+            createdAt: newSession.createdAt.toJSON(),
+            timezoneOffset: newSession.timezoneOffset,
+            owner: newSession.agentId,
+            validTo: newSession.validTo.toJSON()
+        });
 
         await this._eventPublisher.publish(<NewSession_1_0_0>{
             _$schemaId: SchemaTypes.NewSession_1_0_0,
@@ -138,16 +134,5 @@ export class SessionRepo
         });
 
         return new Session(this._eventPublisher, newSession.id, newSession.agentId, jwt, newSession.createdAt.toJSON());
-    }
-
-    static sessionToJwt(session: any & { agent: any })
-    {
-        const tokenData = {
-            exp: session.validTo.getTime() / 1000,
-            iat: session.createdAt.getTime() / 1000,
-            sub: session.id
-        };
-
-        return jsonwebtoken.sign(tokenData, "SuperSecret!!!");
     }
 }

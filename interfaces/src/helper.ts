@@ -1,6 +1,5 @@
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
-import {config} from "./config";
 
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -8,7 +7,7 @@ export class Helper
 {
     public static async sessionFromJwt(jwt: string) : Promise<Session_1_0_0>
     {
-        jsonwebtoken.verify(jwt, config.authentication.jwtSecret);
+        jsonwebtoken.verify(jwt, "4"); // TODO: Get jwt secret from config
         const decodedPayload = jsonwebtoken.decode(jwt);
 
         return <Session_1_0_0> {
@@ -32,14 +31,14 @@ export class Helper
 
         const tokenData = {
             jti: session.id,
-            iss: config.authentication.jwtIssuer,
+            iss: "ABIS", // TODO: Get jwt issuer from config
             exp: new Date(session.validTo).getTime() / 1000,
             iat: new Date(session.createdAt).getTime() / 1000,
             sub: session.owner,
             timezoneOffset: session.timezoneOffset
         };
 
-        const jwt: string = jsonwebtoken.sign(tokenData, config.authentication.jwtSecret);
+        const jwt: string = jsonwebtoken.sign(tokenData, "4"); // TODO: Get jwt secret from config
         return jwt;
     }
 }

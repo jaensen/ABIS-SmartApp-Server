@@ -1,47 +1,14 @@
-mutation createSession {
-    createSession {
+mutation createAnonymousSession {
+    createAnonymousSession {
         success
         errorMessage
         jwt
     }
 }
 
-mutation createChannel($toAgentId:Int! $volatile:Boolean!) {
-    createChannel(toAgentId: $toAgentId volatile: $volatile) {
+mutation send($event:Json!) {
+    send(event: $event) {
         success
         errorMessage
-        channel {
-            id
-            name
-            type
-            members {
-                member {
-                    id
-                    type
-                    name
-                }
-            }
-        }
-    }
-}
-
-input CreateEntryInput {
-    groupId: Int!
-    type: EntryType!
-    name: String!
-    data: Json
-}
-
-mutation createEntry($createEntryInput:CreateEntryInput!) {
-    createEntry(createEntryInput: $createEntryInput) {
-        success
-        errorMessage
-        entry {
-            id
-            type
-            name
-            groupId
-            ownerId
-        }
     }
 }

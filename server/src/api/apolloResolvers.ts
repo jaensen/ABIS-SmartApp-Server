@@ -1,4 +1,11 @@
-import {Agent, QueryResolvers, SubscriptionResolvers} from "../generated/graphql";
+import {
+    Agent,
+    CreateSessionResponse,
+    MutationResolvers,
+    QueryResolvers,
+    SendResponse,
+    SubscriptionResolvers
+} from "../generated/graphql";
 import {AbisServer} from "../core/abisServer";
 import {ConnectionContext} from "./connectionContext";
 import {Log} from "@abis/log/dist/log";
@@ -7,9 +14,29 @@ export class ApolloResolvers
 {
     readonly subscriptionResolvers: SubscriptionResolvers;
     readonly queryResolvers: QueryResolvers;
+    readonly mutationResolvers: MutationResolvers;
 
     constructor(abisServer:AbisServer)
     {
+        this.mutationResolvers = {
+            send:async  (parent, {event}, context: ConnectionContext) =>
+            {
+                await abisServer.eventPublisher.publish(event);
+
+                return <SendResponse> {
+                    success: true
+                };
+            },
+            createAnonymousSession: async (parent, args, context) =>
+            {
+                const anonymousSession = await abisServer.createAnonymousSession();
+                return <CreateSessionResponse>{
+                    success: true,
+                    jwt: anonymousSession.jwt
+                }
+            }
+        };
+
         this.subscriptionResolvers = {
             event: {
                 // @ts-ignore

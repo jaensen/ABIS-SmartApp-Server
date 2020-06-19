@@ -60,7 +60,7 @@ export class AgentRepo {
             throw new Error("The UserRepo wasn't initialized.")
         }
 
-        const implementation = "./agents/profileAgent";
+        const implementation = "../../../apps/abis/dist/authenticationAgent"; // TODO: Make profile agent implementation configurable
         const name = "Anonymous";
         const anonAgent = await AgentRepo._createAgent(this._userRepo.anonymousUserId, name, implementation);
 
