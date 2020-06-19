@@ -3,6 +3,7 @@ import {AgentType} from "@prisma/client";
 import {UserRepo} from "./userRepo";
 import {Agent} from "./types/agent";
 import {Log} from "@abis/log/dist/log";
+import {Agent_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/agent_1_0_0";
 
 export class AgentRepo {
     private readonly _userRepo:UserRepo
@@ -110,8 +111,11 @@ export class AgentRepo {
                 }
             }
         });
-        return <Agent>{
+        return <Agent_1_0_0>{
             id: agent.id,
+            createdAt: agent.createdAt.toJSON(),
+            timezoneOffset: agent.timezoneOffset,
+            type: agent.type,
             name: agent.name,
             implementation: agent.implementation
         };

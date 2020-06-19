@@ -1,0 +1,14 @@
+title Publish 'NewSession_1_0_0' event from 'SessionRepo'
+
+SessionRepo->EventPublisher:publish(NewSession_1_0_0)
+EventPublisher->SystemHook:NewSession_1_0_0
+SystemHook->EventRouter:NewSession_1_0_0
+EventRouter->SystemHook:<<involved agent IDs>>
+SystemHook->AgentHost:ensureAgentsAreLoaded(<<involved agent IDs>>)
+AgentHost->*RuntimeAgent:run()
+AgentHost->SystemHook:<<involved agents are running>>
+SystemHook->EventBroker:NewSession_1_0_0
+EventBroker->EventRouter:NewSession_1_0_0
+EventRouter->EventBroker:number[] (<<involved agent IDs>>)
+EventBroker->RuntimeAgent:NewSession_1_0_0
+EventBroker->[Client & others ..]:NewSession_1_0_0

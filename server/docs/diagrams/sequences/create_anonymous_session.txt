@@ -1,0 +1,17 @@
+title Create anonymous session
+
+Client->MutationResolvers: createAnonymousSession()
+MutationResolvers->AbisServer: createAnonymousSession()
+AbisServer->SessionRepo: createSession(anonymousUserId)
+SessionRepo->AgentRepo: createAnonymousAgent()
+AgentRepo->Prisma:agent.create()
+Prisma->AgentRepo:Agent
+AgentRepo->SessionRepo:Agent_1_0_0
+SessionRepo->Prisma:session.create()
+Prisma->SessionRepo:Session
+SessionRepo->Helper:sessionToJwt()
+Helper->SessionRepo:jwt:string
+SessionRepo->AbisServer:Session
+SessionRepo->EventPublisher:publish(NewSession_1_0_0)
+AbisServer->MutationResolvers:Session
+MutationResolvers->Client:CreateSessionResponse

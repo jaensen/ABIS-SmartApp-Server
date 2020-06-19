@@ -38,13 +38,21 @@ mutation {
 }
 ```
 On the server side, the creation of an anonymous session does the following things:
-1) Create an _Agent_ object in the DB  
+1) Create a new _Agent_ object in the DB  
 _The new _Agent_ is owned by the "anon@abis.local" system user._
 2) Create a new Session  object in the DB  
 _A new _Session_ is created and its 'validTo'-date set. The 'agentId' points to the anonymous Profile and the 'userId' points to the 'anon' system user.  
 The created session is then converted into a JWT, signed and returned with the 'jwt'-field in the result._
 3) Load a new instance of the _Agent_ implementation as _RuntimeAgent_ into the _AgentHost_  
 _The implementation-file (specified by the 'implementation'-field of the Agent) will be loaded by the AgentHost. It then creates a new instance of the Agent, subscribes it to the event system and 'run()'s it._
+  
+Here is a detailed sequence diagram of the process up to step 2. Step 3 branches from the EventPublisher and is shown in the following diagram (all entities are actual class names):
+![UML Sequence diagram that shows the creation of a new anonymous session and its agent](docs/diagrams/sequences/create_anonymous_session.png "Create anonymous session")
+
+And here is how Agents are started as a consequence of incoming messages (step 3):
+![UML Sequence diagram that shows how agents are loaded when a message arrives that concerns them](docs/diagrams/sequences/load_agent_on_event.png "Load agent on arriving event")
+
+_This diagrams are meant as entry point when diving into the code since they cover the most important components of the server-side infrastructure and all entity names are the same as the actual class names._
 
 **2) Send messages**
       
