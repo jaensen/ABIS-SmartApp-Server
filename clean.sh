@@ -25,6 +25,9 @@ cd ../data || exit
 rm -f package-lock.json
 rm -r -f dist
 npm install
+cd src || exit
+npx prisma generate
+cd .. || exit
 npx tsc
 
 cd ../events || exit
@@ -49,6 +52,7 @@ cd ../server || exit
 rm -f package-lock.json
 rm -r -f dist
 npm install
+npm run generate
 npx tsc
 
 cd ../client || exit
