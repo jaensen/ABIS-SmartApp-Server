@@ -3,6 +3,11 @@ This package contains the API server and host application for ABIS.
 
 When running, it provides a GraphQL query- and mutation endpoint at [http://localhost:4000](http://localhost:4000) as well as a subscription endpoint on [ws://localhost:4000/graphql](ws://localhost:4000/graphql) or any other configured address.  
 
+## Requirements
+The server is implemented on top of [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [Prisma 2](https://www.prisma.io/) so it requires NodeJS and a compatible database server (postgres or mysql).  
+It should be possible to run it on Windows, altough all testing and tooling is currently done for Linux only.  
+All code-dependencies are managed via npm. 
+
 ## API
 The complete public API is specified by [src/api/api-schema.graphql](src/api/api-schema.graphql).  
 In general, it provides the following mutations, queries and subscriptions:
