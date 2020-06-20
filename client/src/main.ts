@@ -11,6 +11,7 @@ export class Main
         await client.connect();
 
         const authDialog = await client.newDialog(1, false, "./dialogs/authenticationDialog");
+        authDialog.run();
     }
 }
 

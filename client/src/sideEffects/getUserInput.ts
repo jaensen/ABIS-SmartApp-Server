@@ -4,6 +4,10 @@ import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_
 import {Challenge_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/challenge_1_0_0";
 import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
 
+/**
+ * Should query the requested data from the user via a UI-dialog or similar.
+ * @param outType The expected SchemaType
+ */
 export function getUserInput<TContext, TOut extends SchemaType>(outType:SchemaTypes) : ((context:TContext, event:SchemaType) => Promise<SchemaType>)
 {
     if (outType == SchemaTypes.Signup_1_0_0)
