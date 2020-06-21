@@ -7,12 +7,6 @@ When running, it provides a GraphQL query- and mutation endpoint at
 [http://localhost:4000](http://localhost:4000) as well as a subscription endpoint at 
 [ws://localhost:4000/graphql](ws://localhost:4000/graphql) or any other configured address.  
 
-## Requirements
-The server is implemented on top of [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and 
-[Prisma 2](https://www.prisma.io/) so it requires NodeJS and a compatible database server (postgres or mysql).  
-It should be possible to run it on Windows, altough all testing and tooling is currently done for Linux only.  
-All code-dependencies are managed via npm. 
-
 ## API
 The complete public API is specified by [src/api/api-schema.graphql](src/api/api-schema.graphql).  
 In general, it provides the following mutations, queries and subscriptions:
@@ -30,7 +24,8 @@ Authentication is handled via sever-issued JWT tokens, which must be present in 
 header of every API request.  
 
 ### Usage  
-This section gives you an overview over the GraphQL operations that are used to interact with other _Agents_ on the server:  
+This section gives you an overview over the GraphQL operations that are used to interact with other _Agents_ on the 
+server:  
    
 **1) Create a _Session_**  
   
@@ -108,8 +103,7 @@ The actual _Event_ looks like following:
     "$jwt": "your-jwt",
     "toAgentId": 1,
     "name": "[my-profile-id] -> [1]",
-    "volatile": true // volatile:'true' because we don't want to store communication contentes 
-                     // when communicating with the "authentication" agent.
+    "volatile": true
 }
 ```  
 When this _Event_ arrives at the server, it will be routed to the _RuntimeAgent_ that represents the
@@ -157,17 +151,20 @@ _Profile-Agent_.
 Once both _Agents_ established a _Channel_ to each other (its then called a _DuplexChannel_), they can
 exchange Messages until the _Channel_ is closed by one side. The interaction patterns between 
 _Agents_ are not fixed but there are some standards which are used throughout the system:
+
 * **askFor**  
 The _askFor_1_0_0_ event is sent by an _Agent_ whenever it needs some input to proceed. Depending
 on the situation, this could be user-input or the request for data from a different API that is managed 
 by some other Agent.  
 It is possible for an _Agent_, to send multiple _askFor_1_0_0_ events at once. This usually signals that there
 is more than one way to proceed in a process (branch).   
+
 * **retry**  
 When an _Agent_ ran into an error during the processing of an incoming _Event_, it can signal this to the other
 _Agent_ by sending a _retry_1_0_0_ event. The retry event is only sent when the processing _Agent_ allows retries,
 else the processing _Agent_ will send a _return_1_0_0_ _Event_ with a set error-flag. The receiver of this _Event_
 is then expected to simply re-send its previous request.
+
 * **return**  
 The _return_1_0_0_ _Event_ is sent whenever an _Agent_ wants to signal that a process completed (successful or not). 
 It can contain a value that should be considered as the return-value of the process.  
@@ -187,7 +184,7 @@ This time however, you need to send a _CreateEntry_1_0_0_ _Command_ to your _Pro
 {
     "_$schemaId": "abis-schema://abis@abis.internal/types/events/commands/createEntry_1_0_0",
     "$jwt": "your-jwt",
-    "inGroupId": 123,  // Here goes the ID of the channel from your Agent to the other Agent (your out-channel)
+    "inGroupId": 123,
     "name": "My first 'Entry' in a 'Channel'.",
     "data": {
         "_$schemaId": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/return_1_0_0",
@@ -201,7 +198,8 @@ This time however, you need to send a _CreateEntry_1_0_0_ _Command_ to your _Pro
 ```  
 This looks a little more complicated at first sight, but it is just objects wrapped one into another:
 * **createEntry_1_0_0**:  
-_The main event. It's basically an envelope that tells the recipient (your Profile-Agent) into which group the contained entry should go._
+  _The main event. It's basically an envelope that tells the recipient (your Profile-Agent) into which group the 
+  contained entry should go._
   * **return_1_0_0**:  
   _The actual payload of the createEntry event. In this case a 'return' entry that tells the _Agent_ on the other
   side of the Channel that I want to finish our conversation._
@@ -229,3 +227,51 @@ This time with a _CloseChannel_ _Command_:
     "channelId": 123
 }
 ```  
+
+## Fundamentals
+The server application is built from two major parts: 
+* the GraphQL API which is built on top of [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
+* the [ABIS Server](src/core/abisServer.ts) that hosts all _Agents_ and the _Event_ system
+
+Both are started in the "run()" method of [main.ts](src/main.ts) and then run mostly independent of each other.
+
+### GraphQL API
+The main purpose of the API is to provide access to the _RuntimeAgent_ that represents the user.
+It can further be used by a client to query all its _Groups_ (the own, and the ones where it is a member of) as well as 
+the _Entries_ within it. 
+  
+At start-up, the server loads the complete api schema from [src/api/api-schema.graphql](src/api/api-schema.graphql).   
+The actual implementation of the API can be found in [src/api/apolloResolvers.ts](src/api/apolloResolvers.ts).
+
+See the Apollo Docs for more details on how _Resolvers_ etc. work.
+
+### AbisServer
+The ABIS Server mainly hosts the different runtime representatives of Singleton-, Profile- and Companion-Agents
+and allows them to communicate with each other. It's source can be found at [src/core/abisServer.ts](src/core/abisServer.ts) 
+and it consists of different components that will be described shortly:
+
+* **AgentHost**  
+  The [AgentHost](src/core/agentHost.ts)'s sole responsibility is to start _[RuntimeAgents](../agents/src/runtimeAgent.ts)_ 
+  on request. It uses the [AgentFactory](src/core/agentFactory.ts) to create a new instance of the requested _Agent_ and 
+  then calls its 'run()'-method to start it. Once the _Agent_ is started, it is ready to receive _Events_.
+  Every Agent (distinguished by ID) can only be started once.
+
+* **AgentFactory**   
+  In ABIS, every Agent in the database has a 'implementation' field. The [AgentFactory](src/core/agentFactory.ts) is 
+  responsible to load an Agent from the database by its ID and then to create an instance of its implementation. 
+  The 'implementation'-value must point ot a valid filesystem path which is then loaded with NodeJS's import()-function. 
+   
+* **EventRouter**  
+  The [EventRouter](src/core/eventRouter.ts) acts as a lookup-service that knows which Agent should be notified about 
+  what Event. To determine the recipients of an Event, the EventRouter can deep-inspect some known event types and parse 
+  their fields for e.g. Agent-IDs. It then creates a list of Agent-IDs from the collected information and returns it
+  to the caller.   
+  
+  _Since not every Event is routable, own application protocols must be created on top of the basic routable events 
+  that come with ABIS. These include all [notification](../types/src/schemas/abis/types/events/notifications) and 
+  [command](../types/src/schemas/abis/types/events/commands)-event types._
+  
+* **SystemHook**  
+  The [SystemHook](src/core/systemHook.ts) "hooks" into the server's event stream and sends every incoming Event to the 
+  EventRouter. It then takes the recipient list it got and passes it on to the AgentHost to make sure, every Agent
+  that is affected by the currently inspected event, is loaded.
