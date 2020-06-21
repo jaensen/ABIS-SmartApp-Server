@@ -75,8 +75,8 @@ query myServer {
 This will give you a list of all _Singleton-Agents_ on the server:
 ```json
 {
-    myServer: {
-        systemAgents: [{
+    "myServer": {
+        "systemAgents": [{
             "id": 1,
             "name": "authentication"
         }, ..]
