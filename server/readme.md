@@ -8,7 +8,8 @@ When running, it provides a GraphQL query- and mutation endpoint at
 [ws://localhost:4000/graphql](ws://localhost:4000/graphql) or any other configured address.  
 
 ## Requirements
-The server is implemented on top of [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [Prisma 2](https://www.prisma.io/) so it requires NodeJS and a compatible database server (postgres or mysql).  
+The server is implemented on top of [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and 
+[Prisma 2](https://www.prisma.io/) so it requires NodeJS and a compatible database server (postgres or mysql).  
 It should be possible to run it on Windows, altough all testing and tooling is currently done for Linux only.  
 All code-dependencies are managed via npm. 
 
@@ -25,12 +26,13 @@ In general, it provides the following mutations, queries and subscriptions:
 * **Subscriptions**:
   * event: Json!
 
-Authentication is handled via sever-issued JWT tokens, which must be present in the "Authorization" header of every API request.  
+Authentication is handled via sever-issued JWT tokens, which must be present in the "Authorization" 
+header of every API request.  
 
 ### Usage  
-This section shows the basic GraphQL operations that are necessary to interact with the server:  
+This section gives you an overview over the GraphQL operations that are used to interact with other _Agents_ on the server:  
    
-**1) Create a Session**  
+**1) Create a _Session_**  
   
 To use the API, you must first create a _Session_:
 ```graphql
@@ -43,68 +45,187 @@ mutation {
     }
 }
 ```
-This will give you a JWT token that must be included in the 'Authorization' http-header of every subsequent request.
-The client library creates the session automatically on connect().  
+This will give you a JWT token that must be included in the 'Authorization' http-header of every subsequent 
+request. The client library creates the session automatically on connect().  
 
-On the server side, the creation of an anonymous session does the following things:
-1) Create a new _Profile-Agent_ object in the DB  
-The new _Agent_ is owned by the "anon@abis.local" system _User_.
-2) Create a new _Session_  object in the DB  
-A new _Session_ is created and its 'validTo'-date set. 
-The 'agentId' points to the new anonymous _Profile-Agent_ and the 'userId' points to the 'anon' system _User_.  
-The created session is then converted into a JWT, signed and returned with the 'jwt'-field in the result.
-3) Load a new instance of the _Agent_ implementation as _RuntimeAgent_ into the _AgentHost_  
-The implementation-file (specified by the 'implementation'-field of the Agent) will be loaded by the _AgentHost_. 
-It then creates a new instance of the _Agent_, subscribes it to the _EventBroker_ and 'run()'s it.
-  
-**2) Send messages**
-      
-All communication with the server must be done via message passing. 
-Every _Event_ objects must all contain a valid '_$schemaId'-field that specifies the object type.  
+**2) Subscribe to _Events_**  
 
-There are generally two different types of events:
-* **Commands**:  
-Commands change data or trigger other side-effects. They must include a '$jwt' field that carries the agent's access token.
-Examples include: _CreateChannel_, _CloseChannel_, _CreateEntry_ ..
-* **Notifications**:  
-Notifications signal the effects of commands to other agents. 
-Examples include: _NewGroup_, _GroupClosed_, _NewEntry_, ..   
-
-Clients can use the 'send()' mutation to send _Events_ to the server:
-```graphql
-mutation send($event:Json!) {
-    send(event: $event) {
-        success
-        errorMessage
-    }
-}
-```  
-  
-The send() mutation is intended for the use with _Commands_, but is generally not limited to it.  
-
-Whenever a new message arrives at the server, the following things happen:
-1) The _Event_ is received by the _MutationResolver_ and is then forwarded to the the server-wide (_AbisServer_)
-event publisher (_IEventPublisher_).
-2) The _IEventPublisher_ forwards the _Event_ to the _SystemHook_.
-3) The _SystemHook_ asks the _EventRouter_ for all _Agents_ that should be notified about this _Event_.
-4) The _SystemHook_ calls the 'ensureAgentsAreLoaded()' method on the _AgentHost_ with the agent list from the _EventRouter_ as argument.
-5) When the call returns, the _SystemHook_ forwards the _Event_ to the _EventBroker_.
-6) The _EventBroker_ asks the _EventRouter_ for all _Agents_ that should be notified about this _Event_.
-7) The _EventBroker_ distributes the message to all _Agents_ that the _EventRouter_ returned. 
-
-**3) Receive messages**  
-
-To receive messages from the server, the 'event' subscription can be used:
+To receive messages from the server, the 'event' subscription must be used:
 ```graphql
 subscription newEvent
 {
     event
 }
 ```
-You must provide your session-jwt in the 'authorization'-fields of the connection context. The client library does this for you on connect().
+You must provide your session-jwt in the 'authorization'-fields of the connection context. 
+The client library does this for you on connect().
 
-When suubscribed, the client receives all events that its corresponding _RuntimeAgent_ on the server-side receives. These are mostly 'Notifications' but it is not limited to this kind of message.  
+When subscribed, the client receives all events that its corresponding _RuntimeAgent_ on the 
+server-side receives. These are mostly 'Notifications' but it is not limited to this kind of message.  
 
-Whenever a _Client_ subscribes, the following things happen on the server:
-1) The _SubscriptionResolver_ receives the subscription, checks the JWT and finds the corresponding _Profile-Agent_.
-2) It then passes the _Event_ to the server-wide _IEventPublisher_.
+**3) Query 'myServer'**   
+
+When you are ready to receive _Events_, you can look for _Agents_ to talk to.
+To do that, send a 'myServer' query:
+```graphql
+query myServer {
+    myServer {
+        systemAgents {
+            id
+            name
+        }
+    }
+}
+```
+This will give you a list of all _Singleton-Agents_ on the server:
+```json
+{
+    myServer: {
+        systemAgents: [{
+            "id": 1,
+            "name": "authentication"
+        }, ..]
+    }
+}
+```
+  
+**4) Create a new _Channel_ from your _Profile-Agent_ to the discovered _Singleton-Agent_**
+
+The communication between _Agents_ is usually carried out via a _Channel_. To create a _Channel_, 
+you must send a _CreateChannel_-command to the server:    
+```graphql
+mutation send($event:Json!) {
+    send(event: $event) {
+        success
+        errorMessage
+    } 
+}
+```
+The actual _Event_ looks like following:
+```json
+{
+    "_$schemaId": "abis-schema://abis@abis.internal/types/events/commands/createChannel_1_0_0",
+    "$jwt": "your-jwt",
+    "toAgentId": 1,
+    "name": "[my-profile-id] -> [1]",
+    "volatile": true // volatile:'true' because we don't want to store communication contentes 
+                     // when communicating with the "authentication" agent.
+}
+```  
+When this _Event_ arrives at the server, it will be routed to the _RuntimeAgent_ that represents the
+client's _Profile_. So basically what you do is, sending your _Agent_ the _Command_ to create a new 
+_Channel_ for you.  
+
+If everything succeeds, your _Profile-Agent_ will send you a new 'NewGroup'-event 
+('NewGroup' because a _Channel_ is just a special kind of _Group_) that contains 
+all necessary information about the newly created channel:
+```json
+{
+    "_$schemaId": "abis-schema://abis@abis.internal/types/events/notifications/newGroup_1_0_0",
+    "id": 123,
+    "type": "Channel",
+    "owner": [my-profile-id],
+    "name": "[my-profile-id] -> [1]",
+    "volatile": true,
+    "members": [1]
+}
+```  
+
+**5) Wait for the contacted _Agent_ to respond**
+
+_Channels_ in ABIS are one-way. So currently you can send _Events_ to the discovered "authentication" _Agent_
+but have no way of knowing if the other _Agent_ really received and processed your requests.
+
+To receive answers from a contacted Agent, you must wait for it to create an own _Channel_ back to your _Profile_.
+When that happens, your profile (and thus the previously established 'events'-subscription) receives
+a 'NewMembership' event:
+ ```json
+ {
+     "_$schemaId": "abis-schema://abis@abis.internal/types/events/notifications/newMembership_1_0_0",
+     "id": 123,
+     "creatorId": 1,
+     "memberId": [my-profile-id],
+     "groupId": [id-of-the-back-channel]
+ }
+ ```  
+This _Event_ tells your _Agent_, that it was added as a _Member_ to a _Group_. Since you know that you've contacted the 
+_Agent_ with the ID '1' before, you can conclude that this is the back-channel from the contacted _Agent_ back to your 
+_Profile-Agent_.
+
+**6) Start chatting**
+
+Once both _Agents_ established a _Channel_ to each other (its then called a _DuplexChannel_), they can
+exchange Messages until the _Channel_ is closed by one side. The interaction patterns between 
+_Agents_ are not fixed but there are some standards which are used throughout the system:
+* **askFor**  
+The _askFor_1_0_0_ event is sent by an _Agent_ whenever it needs some input to proceed. Depending
+on the situation, this could be user-input or the request for data from a different API that is managed 
+by some other Agent.  
+It is possible for an _Agent_, to send multiple _askFor_1_0_0_ events at once. This usually signals that there
+is more than one way to proceed in a process (branch).   
+* **retry**  
+When an _Agent_ ran into an error during the processing of an incoming _Event_, it can signal this to the other
+_Agent_ by sending a _retry_1_0_0_ event. The retry event is only sent when the processing _Agent_ allows retries,
+else the processing _Agent_ will send a _return_1_0_0_ _Event_ with a set error-flag. The receiver of this _Event_
+is then expected to simply re-send its previous request.
+* **return**  
+The _return_1_0_0_ _Event_ is sent whenever an _Agent_ wants to signal that a process completed (successful or not). 
+It can contain a value that should be considered as the return-value of the process.  
+The _return_ event carries an 'isError' flag. When set, the 'result' should be considered as the error object.  
+
+You can send _Events_ to a _Channel_ the same way, you've created it:
+```graphql
+mutation send($event:Json!) {
+    send(event: $event) {
+        success
+        errorMessage
+    } 
+}
+```
+This time however, you need to send a _CreateEntry_1_0_0_ _Command_ to your _Profile-Agent_:
+```json
+{
+    "_$schemaId": "abis-schema://abis@abis.internal/types/events/commands/createEntry_1_0_0",
+    "$jwt": "your-jwt",
+    "inGroupId": 123,  // Here goes the ID of the channel from your Agent to the other Agent (your out-channel)
+    "name": "My first 'Entry' in a 'Channel'.",
+    "data": {
+        "_$schemaId": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/return_1_0_0",
+        "isError": false,
+        "result": {
+            "_$schemaId": "abis-schema://abis@abis.internal/types/_lib/primitives/text_1_0_0",
+            "value": "Thanks. Just wanted to see if someone's at home ;)"
+        }
+    }
+}
+```  
+This looks a little more complicated at first sight, but it is just objects wrapped one into another:
+* **createEntry_1_0_0**:  
+_The main event. It's basically an envelope that tells the recipient (your Profile-Agent) into which group the contained entry should go._
+  * **return_1_0_0**:  
+  _The actual payload of the createEntry event. In this case a 'return' entry that tells the _Agent_ on the other
+  side of the Channel that I want to finish our conversation._
+    * text_1_0_0  
+    The return value that I've want to send with my 'return' event. Simple text in this case.
+
+**7) Close the channel**  
+When you're done, you must close the _Channel_ if it is not intended to stay open 'forever'
+(e.g. like in a person to person chat between friends).
+  
+Again, send a new _Event_:
+```graphql
+mutation send($event:Json!) {
+    send(event: $event) {
+        success
+        errorMessage
+    } 
+}
+```
+This time with a _CloseChannel_ _Command_:
+```json
+{
+    "_$schemaId": "abis-schema://abis@abis.internal/types/events/commands/closeChannel_1_0_0",
+    "$jwt": "your-jwt",
+    "channelId": 123
+}
+```  

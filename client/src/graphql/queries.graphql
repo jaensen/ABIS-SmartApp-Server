@@ -1,0 +1,8 @@
+query myServer {
+    myServer {
+        systemAgents {
+            id
+            name
+        }
+    }
+}
