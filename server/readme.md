@@ -186,7 +186,7 @@ This time however, you need to send a _CreateEntry_1_0_0_ _Command_ to your _Pro
 {
     "_$schemaId": "abis-schema://abis@abis.internal/types/events/commands/createEntry_1_0_0",
     "$jwt": "your-jwt",
-    "inGroupId": 123,  // Here goes the ID of the channel from your Agent to the other Agent (your out-channel)
+    "inGroupId": 123,
     "name": "My first 'Entry' in a 'Channel'.",
     "data": {
         "_$schemaId": "abis-schema://abis@abis.internal/types/_lib/interactionPatterns/return_1_0_0",
