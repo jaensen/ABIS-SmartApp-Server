@@ -108,8 +108,7 @@ The actual _Event_ looks like following:
     "$jwt": "your-jwt",
     "toAgentId": 1,
     "name": "[my-profile-id] -> [1]",
-    "volatile": true // volatile:'true' because we don't want to store communication contentes 
-                     // when communicating with the "authentication" agent.
+    "volatile": true
 }
 ```  
 When this _Event_ arrives at the server, it will be routed to the _RuntimeAgent_ that represents the
