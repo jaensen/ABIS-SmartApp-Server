@@ -96,7 +96,12 @@ They are used whenever multiple Agents need to colloborate with each other.
 A Share has no _Members_ but everyone can read it (always public). Only the owner can write to it.  
 They are used as a way to announce things or to provide shared resources to many agents.
 
+### Events
+Every action in ABIS is triggered by an _Event_. _Events_ must have a "_$schemaId" property that identifies the content
+type of the event. _Agents_ exchange _Events_ in _Dialogs_ to provide different service to each other.
+
 ### Entries
+Entries are basically persistable _Events_. An _Event_ becomes an entry when it was posted in a _Group_.
 Everything that must be persisted, is stored as an Entry. Entries are JSON objects that are 
 stored together with a server-wide unique id and a global unique schema-id. 
 Every object must contain a "_$schemaId"-field that identifies the JSON-Schema that represents the object.  
@@ -104,11 +109,6 @@ Every object must contain a "_$schemaId"-field that identifies the JSON-Schema t
 An Entry must be in exactly one Group and has a 'owner' Agent which can edit and delete the Entry.  
 Entries are visible to everyone who is a member of the Group, the Entry lives in. 
 The Group-owner can also delete Entries.
-
-### Events
-Events are basically in-memory Entries which haven't been persisted yet or aren't meant to be persisted at all.
-They must have a valid '_$schemaId'-property but don't need to be in a Group and haven't a 'id' either. 
-Every action in ABIS Server was eventually triggered by an Event.
 
 ### Dialogs
 Dialogs are state machine descriptions that are executed by Agents. 
@@ -120,13 +120,18 @@ However, they can be also used on top of Rooms. In that case, more than one Agen
 
 ## Repository structure
 The repository contains multiple npm-packages. Each package has its own readme file:
+* __@abis/dialog__:  
+Contains mechanisms to describe a Dialog between two Agents as a State-Machine and a runtime 
+to execute these descriptions.  
+  * _Readme: [dialog/readme.md](dialog)_
+  * _Uses: @abis/types, @abis/interfaces, @abis/log_
 * __@abis/server__:  
 Contains the Apollo Server based NodeJS application.  
-  * _Readme: [server/readme.md](server/readme.md)_
+  * _Readme: [server/readme.md](server)_
   * _Uses: @abis/types, @abis/interfaces, @abis/events, @abis/data, @abis/log_
 * __@abis/client__:  
 Contains the client library for the use in own applications.  
-  * _Readme: [client/readme.md](client/readme.md)_
+  * _Readme:
   * _Uses: @abis/types, @abis/interfaces, @abis/dialog, @abis/events, @abis/log_
 * __@abis/types__:  
 Contains a collection of JsonSchema documents and corresponding TypeScript interfaces that 
@@ -141,10 +146,6 @@ Contains the event delivery mechanism that is used for _Agents_ and _Dialogs_
 * __@abis/agents__:  
 Contains the base agent types from which other implementors can derive.
   * _Uses: @abis/types, @abis/interfaces, @abis/dialog, @abis/events, @abis/log, @abis/data_
-* __@abis/dialog__:  
-Contains mechanisms to describe a Dialog between two Agents as a State-Machine and a runtime 
-to execute these descriptions.
-  * _Uses: @abis/types, @abis/interfaces, @abis/log_
 * __@abis/data__:  
 Contains classes that provide access to the _Prisma_ data layer.
   * _Uses: @abis/types, @abis/interfaces, @abis/log_

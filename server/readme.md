@@ -238,7 +238,7 @@ Both are started in the "run()" method of [main.ts](src/main.ts) and then run mo
 ### GraphQL API
 The main purpose of the API is to provide access to the _RuntimeAgent_ that represents the user.
   
-![](docs/diagrams/client_session_runtimeAgent.png)!
+![](docs/diagrams/client_session_runtimeAgent.png)
   
 It can further be used by a client to query all its _Groups_ (the own, and the ones where it is a member of) as well as 
 the _Entries_ within it. 
