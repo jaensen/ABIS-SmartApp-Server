@@ -27,9 +27,9 @@ export class ApolloResolvers
                     success: true
                 };
             },
-            createAnonymousSession: async (parent, args, context) =>
+            createSession: async (parent, args, context) =>
             {
-                const anonymousSession = await abisServer.createAnonymousSession();
+                const anonymousSession = await abisServer.createSession();
                 return <CreateSessionResponse>{
                     success: true,
                     jwt: anonymousSession.jwt

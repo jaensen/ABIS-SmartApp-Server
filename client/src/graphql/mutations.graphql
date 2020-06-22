@@ -1,5 +1,5 @@
-mutation createAnonymousSession {
-    createAnonymousSession {
+mutation createSession {
+    createSession {
         success
         errorMessage
         jwt

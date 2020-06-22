@@ -1,0 +1,7 @@
+title Make sure that all involved agents are loaded, then dispatch the event
+EventPublisher->SystemHook: Event
+SystemHook->EventRouter: <<get involved Agent IDs>>
+EventRouter->SystemHook: <<Agent IDs>>
+SystemHook->AgentHost: <<ensure Agent IDs are loaded>>
+AgentHost->SystemHook:<<loaded>>
+SystemHook->EventBroker:Event

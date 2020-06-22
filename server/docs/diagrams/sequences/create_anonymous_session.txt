@@ -1,7 +1,7 @@
 title Create anonymous session
 
-Client->MutationResolvers: createAnonymousSession()
-MutationResolvers->AbisServer: createAnonymousSession()
+Client->MutationResolvers: createSession()
+MutationResolvers->AbisServer: createSession()
 AbisServer->SessionRepo: createSession(anonymousUserId)
 SessionRepo->AgentRepo: createAnonymousAgent()
 AgentRepo->Prisma:agent.create()

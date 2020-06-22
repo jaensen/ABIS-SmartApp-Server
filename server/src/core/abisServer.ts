@@ -70,7 +70,7 @@ export class AbisServer
         await this._sessionRepo.createSession(systemUser.id, authenticationAgent.id);
     }
 
-    public async createAnonymousSession(): Promise<Session>
+    public async createSession(): Promise<Session>
     {
         if (!this._userRepo.anonymousUserId)
         {

@@ -104,7 +104,7 @@ type SendResponse implements ActionResponse {
 }
 
 type Mutation {
-    createAnonymousSession : CreateSessionResponse!
+    createSession : CreateSessionResponse!
     send(event:Json!) : SendResponse
 }
 

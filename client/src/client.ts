@@ -23,9 +23,9 @@ import ws from "ws";
 import {fetch} from 'cross-fetch'
 import {Helper} from "@abis/interfaces/dist/helper";
 import {
-    CreateAnonymousSession,
-    CreateAnonymousSessionMutation,
-    CreateAnonymousSessionMutationVariables, Exact,
+    createSession,
+    createSessionMutation,
+    createSessionMutationVariables, Exact,
     NewEvent,
     NewEventSubscriptionVariables, Send, SendMutation, SendMutationVariables
 } from "./generated/abis-api";
@@ -135,7 +135,7 @@ export class ClientProxy
             return;
         }
 
-        this._session = await this.createAnonymousSession();
+        this._session = await this.createSession();
         console.log("Got the session. Initializing an authorized connection.");
 
         await this.connect();
@@ -162,21 +162,21 @@ export class ClientProxy
         });
     }
 
-    private async createAnonymousSession() : Promise<Session_1_0_0>
+    private async createSession() : Promise<Session_1_0_0>
     {
         if (!this._client)
             throw new Error("Call connect() first.");
 
-        const session = await this._client.mutate<CreateAnonymousSessionMutation, CreateAnonymousSessionMutationVariables>({
-            mutation: CreateAnonymousSession
+        const session = await this._client.mutate<createSessionMutation, createSessionMutationVariables>({
+            mutation: createSession
         });
 
-        if (!session.data?.createAnonymousSession.success)
+        if (!session.data?.createSession.success)
         {
             throw new Error("Couldn't create a session at " + this._host);
         }
 
-        return await Helper.sessionFromJwt(session.data.createAnonymousSession.jwt);
+        return await Helper.sessionFromJwt(session.data.createSession.jwt);
     }
 
     subscribeTo()

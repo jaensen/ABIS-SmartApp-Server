@@ -147,7 +147,7 @@ export type SendResponse = ActionResponse & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createAnonymousSession: CreateSessionResponse;
+  createSession: CreateSessionResponse;
   send?: Maybe<SendResponse>;
 };
 
@@ -380,7 +380,7 @@ export type SendResponseResolvers<ContextType = any, ParentType extends Resolver
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createAnonymousSession?: Resolver<ResolversTypes['CreateSessionResponse'], ParentType, ContextType>,
+  createSession?: Resolver<ResolversTypes['CreateSessionResponse'], ParentType, ContextType>,
   send?: Resolver<Maybe<ResolversTypes['SendResponse']>, ParentType, ContextType, RequireFields<MutationSendArgs, 'event'>>,
 }>;
 

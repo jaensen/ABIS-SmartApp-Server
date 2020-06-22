@@ -11,7 +11,7 @@ When running, it provides a GraphQL query- and mutation endpoint at
 The complete public API is specified by [src/api/api-schema.graphql](src/api/api-schema.graphql).  
 In general, it provides the following mutations, queries and subscriptions:
 * **Mutations**:
-  * createAnonymousSession() : CreateSessionResponse
+  * createSession() : CreateSessionResponse
   * send(event:Json!) : SendResponse
 * **Queries**:
   * myServer: Server!
@@ -32,7 +32,7 @@ server:
 To use the API, you must first create a _Session_:
 ```graphql
 mutation {
-    createAnonymousSession {
+    createSession {
         success
         errorMessage
         jwt                 # Contains the JWT which must be included in the 'Authorization' header of
@@ -237,9 +237,12 @@ Both are started in the "run()" method of [main.ts](src/main.ts) and then run mo
 
 ### GraphQL API
 The main purpose of the API is to provide access to the _RuntimeAgent_ that represents the user.
+  
+![](docs/diagrams/client_session_runtimeAgent.png)!
+  
 It can further be used by a client to query all its _Groups_ (the own, and the ones where it is a member of) as well as 
 the _Entries_ within it. 
-  
+
 At start-up, the server loads the complete api schema from [src/api/api-schema.graphql](src/api/api-schema.graphql).   
 The actual implementation of the API can be found in [src/api/apolloResolvers.ts](src/api/apolloResolvers.ts).
 
@@ -248,7 +251,7 @@ See the Apollo Docs for more details on how _Resolvers_ etc. work.
 ### AbisServer
 The ABIS Server mainly hosts the different runtime representatives of Singleton-, Profile- and Companion-Agents
 and allows them to communicate with each other. It's source can be found at [src/core/abisServer.ts](src/core/abisServer.ts) 
-and it consists of different components that will be described shortly:
+and it consists of different components that should be described shortly:
 
 * **AgentHost**  
   The [AgentHost](src/core/agentHost.ts)'s sole responsibility is to start _[RuntimeAgents](../agents/src/runtimeAgent.ts)_ 
@@ -275,3 +278,28 @@ and it consists of different components that will be described shortly:
   The [SystemHook](src/core/systemHook.ts) "hooks" into the server's event stream and sends every incoming Event to the 
   EventRouter. It then takes the recipient list it got and passes it on to the AgentHost to make sure, every Agent
   that is affected by the currently inspected event, is loaded.
+  
+* **EventPublisher**  
+  The _EventPublisher_ is where the server's event stream ultimately starts. Every component of the system must publish 
+  its _Events_ via this publisher.
+  
+* **EventBroker**  
+  This is the only component in this list that's not exclusive to the ABIS Server. 
+  It generally manages event streams by a topic-ID and is used by the server to deliver incoming events to their 
+  corresponding Agents. The ID of the _Agent_ is used as topic ID. It utilizes the _EventRouter_ to find the right
+  topic IDs.
+  
+### Implementation details
+The server must make sure, the implementation of the _Agent_ which is about to receive an _Event_, is loaded when the 
+event arrives at the server's _EventBroker_.
+To do that, all _Events_ that arrive at the server's _EventPublisher_ are redirected to the _SystemHook_ 
+first (see AdapterPublisher).  
+
+The _SystemHook_ then asks the _EventRouter_ for the IDs of all _Agents_ that are involved
+with this _Event_. It then passes that list on to the _AgentHost_ with the order to make sure, that all _Agents_ on
+this list must be loaded. The _AgentHost_ then starts the _RuntimeAgents_ if necessary.  
+
+When all Agents have been loaded, the _SystemHook_ passes the _Event_ on to the server's _EventBroker_. 
+
+![](docs/diagrams/sequences/ensure_agents_are_loaded.png)  
+
