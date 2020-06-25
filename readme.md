@@ -1,6 +1,6 @@
 # ABIS Server
 This repository contains the server component of abis. The server provides a GraphQL-API and comes with a client library.  
-It is based on [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [Prisma 2](https://www.prisma.io/). Publisher is: DBI Analytics GmbH
+It is based on [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [Prisma 2](https://www.prisma.io/). Publisher and license holder is: DBI Analytics GmbH
 
 ## Quickstart
 **1) Clone the repository:**  
