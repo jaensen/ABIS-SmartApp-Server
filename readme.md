@@ -5,7 +5,7 @@ It is based on [Apollo Server](https://www.apollographql.com/docs/apollo-server/
 ## Quickstart
 **1) Clone the repository:**  
 ```
-$ git clone https://github.com/ABISCloud/ABIS-OS1-Gamma.git
+$ git clone https://github.com/ABISCloud/ABIS-OS1-Server.git
 ```
 **2) Adjust the database config**  
   
