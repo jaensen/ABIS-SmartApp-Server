@@ -46,7 +46,7 @@ independent software vendors who want to integrate it into their applications or
 use it as their sole backend. 
   
 It provides authentication and authorization, a group-chat, notifications, 
-forms and a workflow system under one application-agnostic GraphQL API.
+forms, charts and a workflow system under one application-agnostic GraphQL API.
 
 Besides the built-in functionality, it is expandable with own _Dialogs_. 
 Dialogs are blueprints for chatbot-conversations. 
