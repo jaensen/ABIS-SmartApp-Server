@@ -151,4 +151,4 @@ Contains classes that provide access to the _Prisma_ data layer.
   * _Uses: @abis/types, @abis/interfaces, @abis/log_
   
 Copyright © 2020 ABIS Cloud (DBI Analytics GmbH)
-Licensed under the GNU AFFERO GENERAL PUBLIC LICENSE License, which is included in this repository or available at https://www.gnu.org/licenses/agpl-3.0.en.html
+Licensed under the AGPL-V3, which is included in this repository or available at https://www.gnu.org/licenses/agpl-3.0.en.html
