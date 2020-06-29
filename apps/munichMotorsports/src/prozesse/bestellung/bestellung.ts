@@ -10,6 +10,7 @@ import {ErfasseBestellpositionen_1_0_0} from "@abis/types/dist/schemas/munichMot
 import {Auftrag_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/auftrag/_generated/auftrag_1_0_0";
 import {Verdingungsbogen_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/verdingungsbogen/_generated/verdingungsbogen_1_0_0";
 import {SideEffects} from "./sideEffects";
+import {Barkaufabrechnung_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/barkaufabrechnung/_generated/barkaufabrechnung_1_0_0";
 
 export class Bestellung extends Dialog
 {
@@ -24,6 +25,7 @@ export class Bestellung extends Dialog
             ""
             | "wähle_budget"
             | "erfasse_positionen"
+            | "erfasse_barkauf"
             | "erfasse_auftrag"
             | "erfasse_verdingungsbogen"
             , DialogContext & {budgetGroupId:number}>();
@@ -43,50 +45,36 @@ export class Bestellung extends Dialog
 
             .when("wähle_budget")
                 .on<WaehleBudget_1_0_0>(SchemaTypes.WaehleBudget_1_0_0)
-                .send(async (c) => {
-                    return <AskFor_1_0_0>{
-                        _$schemaId: SchemaTypes.AskFor_1_0_0,
-                        next: SchemaTypes.ErfasseBestellpositionen_1_0_0
-                    }
-                })
+                .askFor(SchemaTypes.ErfasseBestellpositionen_1_0_0)
                 .goto("erfasse_positionen")
 
             .when("erfasse_positionen")
-                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0, f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 100)
-                .send(async (c) => {
-                    return <AskFor_1_0_0>{
-                        _$schemaId: SchemaTypes.AskFor_1_0_0,
-                        next: SchemaTypes.Barkaufabrechnung_1_0_0
-                    }
-                })
-                .stay()
 
-                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0, f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 1000)
-                    .send(async (c) => {
-                        return <AskFor_1_0_0>{
-                            _$schemaId: SchemaTypes.AskFor_1_0_0,
-                            next: SchemaTypes.Auftrag_1_0_0
-                        }
-                    })
+                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
+                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 100)
+                    .askFor(SchemaTypes.Barkaufabrechnung_1_0_0)
+                    .goto("erfasse_barkauf")
+
+                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
+                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 1000)
+                    .askFor(SchemaTypes.Auftrag_1_0_0)
                     .goto("erfasse_auftrag")
 
-                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0, f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 10000)
-                    .send(async (c) => {
-                        return <AskFor_1_0_0>{
-                            _$schemaId: SchemaTypes.AskFor_1_0_0,
-                            next: SchemaTypes.Verdingungsbogen_1_0_0
-                        }
-                    })
+                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
+                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 10000)
+                    .askFor(SchemaTypes.Verdingungsbogen_1_0_0)
                     .goto("erfasse_verdingungsbogen")
 
-                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0, f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) > 10000)
-                    .send(async (c) => {
-                        return <AskFor_1_0_0>{
-                            _$schemaId: SchemaTypes.AskFor_1_0_0,
-                            next: SchemaTypes.Verdingungsbogen_1_0_0
-                        }
-                    })
+                .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
+                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) > 10000)
+                    .askFor(SchemaTypes.Verdingungsbogen_1_0_0)
                     .goto("erfasse_verdingungsbogen")
+
+            .when("erfasse_barkauf")
+                .on<Barkaufabrechnung_1_0_0>(SchemaTypes.Barkaufabrechnung_1_0_0)
+                .await(SideEffects.reserviereBudgetFürBarkauf)
+                .onErrorFail()
+                .close()
 
             .when("erfasse_auftrag")
                 .on<Auftrag_1_0_0>(SchemaTypes.Auftrag_1_0_0)

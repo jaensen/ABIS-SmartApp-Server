@@ -2,6 +2,7 @@ import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {StateBuilder} from "./stateBuilder";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
+import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
 
 export class TriggerBuilder<
     TStates extends string,
@@ -132,6 +133,16 @@ export class TriggerBuilder<
         this._parent.triggers.push(trigger);
 
         return trigger;
+    }
+
+    askFor(type:SchemaTypes)
+    {
+        return this.send(async (c,e,r) => {
+            return <AskFor_1_0_0> {
+                _$schemaId: SchemaTypes.AskFor_1_0_0,
+                next: SchemaTypes.Verdingungsbogen_1_0_0
+            }
+        });
     }
 
     sendResult() : TriggerBuilder<TStates, TContext, TEvent, TResult>
