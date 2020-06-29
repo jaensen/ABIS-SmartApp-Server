@@ -26,7 +26,6 @@ import {NewGroup_1_0_0} from "../abis/types/events/notifications/_generated/newG
 import {NewMembership_1_0_0} from "../abis/types/events/notifications/_generated/newMembership_1_0_0";
 import {NewSession_1_0_0} from "../abis/types/events/notifications/_generated/newSession_1_0_0";
 import {Signatur_1_0_0} from "../hochschuleMünchen/types/_lib/_generated/signatur_1_0_0";
-import {Budget_1_0_0} from "../hochschuleMünchen/types/_lib/buchhaltung/_generated/budget_1_0_0";
 import {Kostenstelle_1_0_0} from "../hochschuleMünchen/types/_lib/buchhaltung/_generated/kostenstelle_1_0_0";
 import {Kostentrager_1_0_0} from "../hochschuleMünchen/types/_lib/buchhaltung/_generated/kostenträger_1_0_0";
 import {Dienstleistung_1_0_0} from "../hochschuleMünchen/types/_lib/erbringung/_generated/dienstleistung_1_0_0";
@@ -44,9 +43,29 @@ import {Barkaufabrechnungszeile_1_0_0} from "../hochschuleMünchen/types/formula
 import {Finanzierungsangaben_1_0_0} from "../hochschuleMünchen/types/formulare/finanzierungsangaben/_generated/finanzierungsangaben_1_0_0";
 import {Verdingungsbogen_1_0_0} from "../hochschuleMünchen/types/formulare/verdingungsbogen/_generated/verdingungsbogen_1_0_0";
 import {Vergleichsangebot_1_0_0} from "../hochschuleMünchen/types/formulare/verdingungsbogen/_lib/_generated/vergleichsangebot_1_0_0";
-import {Sponsor_1_0_0} from "../munichMotorsports/types/_lib/sponsoring/_generated/sponsor_1_0_0";
-import {AnfrageGestellt_1_0_0} from "../munichMotorsports/types/prozesse/leistungsanfrage/_generated/anfrageGestellt_1_0_0";
-import {Leistungsanfrage_1_0_0} from "../munichMotorsports/types/prozesse/leistungsanfrage/_generated/leistungsanfrage_1_0_0";
+import {Buchung_1_0_0} from "../munichMotorsports/types/_lib/budget/_generated/buchung_1_0_0";
+import {BudgetReservierung_1_0_0} from "../munichMotorsports/types/_lib/budget/_generated/budgetReservierung_1_0_0";
+import {Budget_1_0_0} from "../munichMotorsports/types/_lib/budget/_generated/budget_1_0_0";
+import {Projekt_1_0_0} from "../munichMotorsports/types/_lib/projekt/_generated/projekt_1_0_0";
+import {Ressource_1_0_0} from "../munichMotorsports/types/_lib/ressource/_generated/ressource_1_0_0";
+import {Saison_1_0_0} from "../munichMotorsports/types/_lib/saison/_generated/saison_1_0_0";
+import {Sponsor_1_0_0} from "../munichMotorsports/types/_lib/sponsor/_generated/sponsor_1_0_0";
+import {ErfasseBestellpositionen_1_0_0} from "../munichMotorsports/types/prozesse/bestellung/_generated/erfasseBestellpositionen_1_0_0";
+import {NeueBestellung_1_0_0} from "../munichMotorsports/types/prozesse/bestellung/_generated/neueBestellung_1_0_0";
+import {WaehleBudget_1_0_0} from "../munichMotorsports/types/prozesse/bestellung/_generated/waehleBudget_1_0_0";
+import {NeueBuchung_1_0_0} from "../munichMotorsports/types/prozesse/budget/_generated/neueBuchung_1_0_0";
+import {NeuesBudget_1_0_0} from "../munichMotorsports/types/prozesse/budget/_generated/neuesBudget_1_0_0";
+import {EditiereProjekt_1_0_0} from "../munichMotorsports/types/prozesse/projekt/_generated/editiereProjekt_1_0_0";
+import {NeuesProjekt_1_0_0} from "../munichMotorsports/types/prozesse/projekt/_generated/neuesProjekt_1_0_0";
+import {SchliesseProjekt_1_0_0} from "../munichMotorsports/types/prozesse/projekt/_generated/schließeProjekt_1_0_0";
+import {NeueRessource_1_0_0} from "../munichMotorsports/types/prozesse/ressource/_generated/neueRessource_1_0_0";
+import {SpeiseBudget_1_0_0} from "../munichMotorsports/types/prozesse/ressource/_generated/speiseBudget_1_0_0";
+import {EditiereSaison_1_0_0} from "../munichMotorsports/types/prozesse/saison/_generated/editiereSaison_1_0_0";
+import {NeueSaison_1_0_0} from "../munichMotorsports/types/prozesse/saison/_generated/neueSaison_1_0_0";
+import {SchliesseSaison_1_0_0} from "../munichMotorsports/types/prozesse/saison/_generated/schließeSaison_1_0_0";
+import {EditiereSponsor_1_0_0} from "../munichMotorsports/types/prozesse/sponsor/_generated/editiereSponsor_1_0_0";
+import {NeuerSponsor_1_0_0} from "../munichMotorsports/types/prozesse/sponsor/_generated/neuerSponsor_1_0_0";
+import {SchliesseSponsor_1_0_0} from "../munichMotorsports/types/prozesse/sponsor/_generated/schließeSponsor_1_0_0";
 
 export type SchemaType = Void_1_0_0
     | AskFor_1_0_0
@@ -76,7 +95,6 @@ export type SchemaType = Void_1_0_0
     | NewMembership_1_0_0
     | NewSession_1_0_0
     | Signatur_1_0_0
-    | Budget_1_0_0
     | Kostenstelle_1_0_0
     | Kostentrager_1_0_0
     | Dienstleistung_1_0_0
@@ -94,6 +112,26 @@ export type SchemaType = Void_1_0_0
     | Finanzierungsangaben_1_0_0
     | Verdingungsbogen_1_0_0
     | Vergleichsangebot_1_0_0
+    | Buchung_1_0_0
+    | BudgetReservierung_1_0_0
+    | Budget_1_0_0
+    | Projekt_1_0_0
+    | Ressource_1_0_0
+    | Saison_1_0_0
     | Sponsor_1_0_0
-    | AnfrageGestellt_1_0_0
-    | Leistungsanfrage_1_0_0;
+    | ErfasseBestellpositionen_1_0_0
+    | NeueBestellung_1_0_0
+    | WaehleBudget_1_0_0
+    | NeueBuchung_1_0_0
+    | NeuesBudget_1_0_0
+    | EditiereProjekt_1_0_0
+    | NeuesProjekt_1_0_0
+    | SchliesseProjekt_1_0_0
+    | NeueRessource_1_0_0
+    | SpeiseBudget_1_0_0
+    | EditiereSaison_1_0_0
+    | NeueSaison_1_0_0
+    | SchliesseSaison_1_0_0
+    | EditiereSponsor_1_0_0
+    | NeuerSponsor_1_0_0
+    | SchliesseSponsor_1_0_0;

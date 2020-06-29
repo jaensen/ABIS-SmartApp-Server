@@ -14,7 +14,7 @@
       "type": "object",
       "allOf": [
         { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/kostenstelle_1_0_0" },
-        { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/budget_1_0_0" },
+        { "$ref":  "abis-schema://munichMotorsports@abis.internal/types/_lib/budget/budget_1_0_0" },
         { "$ref":  "abis-schema://hochschuleMünchen@abis.internal/types/_lib/buchhaltung/kostenträger_1_0_0" }
       ],
       "properties": {

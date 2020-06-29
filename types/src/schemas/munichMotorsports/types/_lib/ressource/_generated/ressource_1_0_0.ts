@@ -7,12 +7,13 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-/**
- * Contains the '_$schemaId' attribute which is used to mark an object with a specific SchemaType.
- */
-export interface SchemaId_1_0_0 {
-   _$schemaId: SchemaTypes.SchemaId_1_0_0;
+export interface Ressource_1_0_0 {
+   _$schemaId: SchemaTypes.Ressource_1_0_0;
 
-  _$schemaId: string;
+  id?: number;
+  name: string;
+  beschreibung?: string;
+  kategorie: "Geldleistung" | "Sachleistung" | "Dienstleistung";
+  geldwert: number;
   [k: string]: unknown;
 }

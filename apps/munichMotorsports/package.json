@@ -1,0 +1,21 @@
+{
+  "name": "@abis/apps_munichMotorsports",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Daniel Janz & David Chang",
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@types/node": "^14.0.1",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2"
+  },
+  "dependencies": {
+    "@abis/types": "../../types",
+    "@abis/interfaces": "../../interfaces",
+    "@abis/events": "../../events",
+    "@abis/dialog": "../../dialog",
+    "@abis/agents": "../../agents",
+    "@abis/log": "../../log"
+  }
+}

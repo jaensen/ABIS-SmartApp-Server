@@ -25,7 +25,8 @@ export class Main
             typeDefs: apiSchemaTypeDefs,
             resolvers: {
                 Mutation: this._apolloResolvers.mutationResolvers,
-                Subscription: this._apolloResolvers.subscriptionResolvers
+                Subscription: this._apolloResolvers.subscriptionResolvers,
+                Query: this._apolloResolvers.queryResolvers
             }
         });
     }

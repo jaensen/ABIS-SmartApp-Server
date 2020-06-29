@@ -7,9 +7,12 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface Sponsor_1_0_0 {
-   _$schemaId: SchemaTypes.Sponsor_1_0_0;
+export interface Projekt_1_0_0 {
+   _$schemaId: SchemaTypes.Projekt_1_0_0;
 
+  id?: number;
+  beginn?: string;
+  ende?: string;
   name: string;
   [k: string]: unknown;
 }

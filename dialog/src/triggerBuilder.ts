@@ -28,7 +28,7 @@ export class TriggerBuilder<
     onErrorRetryCount?:number;
     nextState?:TStates;
 
-    awaitPromise?:(context:TContext, event:TEvent) => Promise<SchemaType>;
+    awaitPromise?:(context:TContext, event:TEvent, result:TResult) => Promise<SchemaType>;
     sendMessageFactory?:(context:TContext, event:TEvent, result:TResult) => Promise<SchemaType>;
 
 
@@ -85,7 +85,7 @@ export class TriggerBuilder<
         this.log = log;
     }
 
-    await<TAwaitResult extends SchemaType>(promise:(context:TContext, event:TEvent) => Promise<TAwaitResult>)
+    await<TAwaitResult extends SchemaType>(promise:(context:TContext, event:TEvent, result:TResult) => Promise<TAwaitResult>)
         : {
         onErrorRetry:(times?:number) => TriggerBuilder<TStates, TContext, TEvent, TAwaitResult>,
         onErrorFail:() => TriggerBuilder<TStates, TContext, TEvent, TAwaitResult>,

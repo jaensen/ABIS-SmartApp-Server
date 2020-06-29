@@ -78,6 +78,23 @@ export class ApolloResolvers
                         }
                     })
                 };
+            },
+            myProfile: async (parent: any, args: any, context: ConnectionContext) =>
+            {
+                if (!context.jwt)
+                    throw new Error("No jwt was supplied.");
+
+                const agent = await abisServer.agentData.findAgent.byJwt(context.jwt);
+                if (!agent)
+                    throw new Error("Unauthorized");
+
+                return <Agent>{
+                    id: agent.id,
+                    name: agent.name,
+                    createdAt: agent.createdAt,
+                    type: agent.type,
+                    timezoneOffset: agent.timezoneOffset
+                }
             }
         }
     }

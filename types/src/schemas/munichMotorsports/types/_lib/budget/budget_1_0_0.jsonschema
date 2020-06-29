@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://munichMotorsports@abis.internal/types/_lib/budget/budget_1_0_0",
+  "title": "Budget",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "name": { "type": "string" }
+  },
+  "required": [
+    "name"
+  ]
+}

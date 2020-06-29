@@ -17,6 +17,9 @@
     "name": {
       "type": "string"
     },
+    "companionAgentId": {
+      "type": "number"
+    },
     "type": {
       "type": "string",
       "enum": [

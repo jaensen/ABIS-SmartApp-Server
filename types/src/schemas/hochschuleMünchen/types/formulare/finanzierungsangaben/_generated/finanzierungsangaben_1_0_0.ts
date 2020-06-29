@@ -27,14 +27,10 @@ export interface Finanzierungsangaben_1_0_0 {
   finanzierung?: {
     kostenstelle?: string;
     [k: string]: unknown;
-  } & {
-    budgetNr?: string;
-    budgetName?: string;
-    [k: string]: unknown;
-  } & {
-    kostenträger?: string;
-    [k: string]: unknown;
-  };
+  } & Budget & {
+      kostenträger?: string;
+      [k: string]: unknown;
+    };
   mitzeichnungIT?: {
     notwendig?: boolean;
     neinBegründung?: string;
@@ -71,5 +67,10 @@ export interface Finanzierungsangaben_1_0_0 {
     };
     [k: string]: unknown;
   };
+  [k: string]: unknown;
+}
+export interface Budget {
+  id?: number;
+  name: string;
   [k: string]: unknown;
 }

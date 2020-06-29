@@ -7,12 +7,16 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-/**
- * Contains the '_$schemaId' attribute which is used to mark an object with a specific SchemaType.
- */
-export interface SchemaId_1_0_0 {
-   _$schemaId: SchemaTypes.SchemaId_1_0_0;
+export interface SchliesseSaison_1_0_0 {
+   _$schemaId: SchemaTypes.SchliesseSaison_1_0_0;
 
-  _$schemaId: string;
+  schließeSaison?: Saison;
+  [k: string]: unknown;
+}
+export interface Saison {
+  id?: number;
+  beginn: string;
+  ende: string;
+  name: string;
   [k: string]: unknown;
 }

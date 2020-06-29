@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "abis-schema://munichMotorsports@abis.internal/types/prozesse/sponsor/neuerSponsor_1_0_0",
+  "title": "Neuer Sponsor",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "neuerSponsor": {
+      "allOf": [
+        { "$ref": "abis-schema://munichMotorsports@abis.internal/types/_lib/sponsor/sponsor_1_0_0" }
+      ]
+    }
+  },
+  "required": [
+  ]
+}

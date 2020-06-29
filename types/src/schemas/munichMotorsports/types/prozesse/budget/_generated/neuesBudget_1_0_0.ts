@@ -7,10 +7,14 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface Budget_1_0_0 {
-   _$schemaId: SchemaTypes.Budget_1_0_0;
+export interface NeuesBudget_1_0_0 {
+   _$schemaId: SchemaTypes.NeuesBudget_1_0_0;
 
-  budgetNr?: string;
-  budgetName?: string;
+  neuesBudget?: Budget;
+  [k: string]: unknown;
+}
+export interface Budget {
+  id?: number;
+  name: string;
   [k: string]: unknown;
 }

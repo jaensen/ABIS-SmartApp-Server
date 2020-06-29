@@ -14,6 +14,7 @@ export interface Group_1_0_0 {
   owner?: number;
   createdAt?: string;
   name: string;
+  companionAgentId?: number;
   type?: "Stash" | "Channel" | "Room" | "Share";
   volatile?: boolean;
   [k: string]: unknown;

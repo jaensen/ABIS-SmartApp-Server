@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "abis-schema://munichMotorsports@abis.internal/types/prozesse/leistungsanfrage/anfrageGestellt_1_0_0",
-  "title": "AnfrageGestellt",
+  "$id": "abis-schema://munichMotorsports@abis.internal/types/prozesse/bestellung/neueBestellung_1_0_0",
+  "title": "Neue Bestellung",
   "description": "",
   "type": "object",
   "properties": {

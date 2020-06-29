@@ -163,3 +163,23 @@ async execute(context:TContext, event:SchemaType) : Promise<void>
 } 
 ```
 
+## Dialog
+The Dialog is an abstract base class for custom dialogs. It has an abstract build() method that is expected to return
+a new RuntimeDialog each time the method is called:
+```typescript
+export class AuthenticationDialog extends Dialog
+{
+    protected build() : RuntimeState<string, DialogContext>[]
+    {
+        const builder = new DialogBuilder<
+            ""
+            | "signup"
+            | "signup:challenge"
+            | "more states .." , DialogContext>();
+
+        // Use the builder to describe the dialog ...
+
+        return builder.build();
+    }
+}
+```
