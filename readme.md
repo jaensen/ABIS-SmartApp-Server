@@ -46,7 +46,7 @@ $ npx prisma migrate up --experimental
 ```
 **5) Run the server**
 ```  
-$ cd server
+$ cd ../../server
 $ node dist/main.js
 ```
 **6) Generate the client code**
