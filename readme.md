@@ -54,6 +54,10 @@ $ node dist/main.js
 $ cd client
 $ npm run generate
 ```
+for testing run again. Should run without any errors then
+```
+$ ./clean.sh
+```
 
 ## What is it?
 ABIS Server is a bare-bones collaboration server that is targeted at 
