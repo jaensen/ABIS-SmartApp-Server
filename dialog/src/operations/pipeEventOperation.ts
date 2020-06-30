@@ -4,7 +4,7 @@ import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/vo
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class PipeEventOperation<TStates extends string, TContext extends IDialogContext> extends Operation<TContext>
+export class PipeEventOperation<TStates extends string> extends Operation
 {
     readonly nextState: TStates;
 
@@ -14,7 +14,7 @@ export class PipeEventOperation<TStates extends string, TContext extends IDialog
         this.nextState = nextState;
     }
 
-    async execute(context: TContext, event: SchemaType, result: SchemaType): Promise<SchemaType>
+    async execute(context: any, event: SchemaType, result: SchemaType): Promise<SchemaType>
     {
         await context.goto(this.nextState, event);
         return <Void_1_0_0>{

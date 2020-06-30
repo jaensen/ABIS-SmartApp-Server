@@ -4,21 +4,21 @@ import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/vo
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class AwaitWithIgnoreOperation<TStates extends string, TContext extends IDialogContext> extends Operation<TContext>
+export class AwaitWithIgnoreOperation<TStates extends string> extends Operation
 {
-    readonly awaitPromise: (context: TContext, event: SchemaType) => Promise<SchemaType>;
+    readonly awaitPromise: (context: any, event: SchemaType, result: SchemaType) => Promise<SchemaType>;
 
-    constructor(awaitPromise: (context: TContext, event: SchemaType) => Promise<SchemaType>)
+    constructor(awaitPromise: (context: any, event: SchemaType, result: SchemaType) => Promise<SchemaType>)
     {
         super();
         this.awaitPromise = awaitPromise;
     }
 
-    async execute(context: TContext, event: SchemaType, result: SchemaType): Promise<SchemaType>
+    async execute(context: any, event: SchemaType, result: SchemaType): Promise<SchemaType>
     {
         try
         {
-            return await this.awaitPromise(context, event);
+            return await this.awaitPromise(context, event, result);
         }
         catch (e)
         {

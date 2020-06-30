@@ -2,7 +2,7 @@ import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/signup_1_0_0";
 import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
 import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
-import {Dialog, DialogContext} from "@abis/dialog/dist/dialog";
+import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
 import {RuntimeState} from "@abis/dialog/dist/runtime/runtimeState";
 import {ChangePassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/changePassword_1_0_0";
@@ -12,15 +12,17 @@ import {ResetPassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentic
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
 import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/void_1_0_0";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
+import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
 export class AuthenticationDialog extends Dialog
 {
-    constructor(duplexChannel: IDuplexChannel, jwt: string)
+    constructor(duplexChannel: IDuplexChannel, session: Session_1_0_0)
     {
-        super(duplexChannel, jwt);
+        super(duplexChannel, session);
     }
 
-    protected build() : RuntimeState<string, DialogContext>[]
+    protected build() : RuntimeState<string>[]
     {
         const builder = new DialogBuilder<
             ""
@@ -31,7 +33,7 @@ export class AuthenticationDialog extends Dialog
             | "reset_password"
             | "reset_password:challenge"
             | "reset_password:set_password"
-            | "finished" , DialogContext>();
+            | "finished" , AgentDialogContext>();
 
         builder
             .when("")

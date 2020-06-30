@@ -33,16 +33,16 @@ export class DialogBuilder<
 
     build()
     {
-        const runtimeStates:RuntimeState<TStates, TContext>[] = [];
+        const runtimeStates:RuntimeState<TStates>[] = [];
 
         for (let stateName in this._states)
         {
             const state = this._states[stateName];
             const triggers = this._getTriggerChainFromState(state);
 
-            const runtimeTriggers:RuntimeTrigger<TStates, TContext>[] = triggers.map(triggerChain =>
+            const runtimeTriggers:RuntimeTrigger<TStates>[] = triggers.map(triggerChain =>
             {
-                const triggerOperations:Operation<TContext>[] = triggerChain.chain.map(trigger =>
+                const triggerOperations:Operation[] = triggerChain.chain.map(trigger =>
                 {
                     if (trigger.closeFlag) {
                         return new CloseOperation();
@@ -79,7 +79,7 @@ export class DialogBuilder<
                     }
                 });
 
-                return new RuntimeTrigger<TStates, TContext>(
+                return new RuntimeTrigger<TStates>(
                     triggerChain.root,
                     triggerChain.chain,
                     triggerOperations);

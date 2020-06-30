@@ -1,4 +1,3 @@
-import {DialogContext} from "@abis/dialog/dist/dialog";
 import {Sponsor_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/sponsor/_generated/sponsor_1_0_0";
 import {SideEffects as BaseSideEffects} from "../sideEffects";
 import {NeueSaison_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/saison/_generated/neueSaison_1_0_0";
@@ -11,10 +10,11 @@ import {NeuesProjekt_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/typ
 import {Projekt_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/projekt/_generated/projekt_1_0_0";
 import {NeuesBudget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/budget/_generated/neuesBudget_1_0_0";
 import {Budget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/budget/_generated/budget_1_0_0";
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class SideEffects {
 
-    static async erstelleNeueSaison(context: DialogContext, neueSaison:NeueSaison_1_0_0) : Promise<Saison_1_0_0>
+    static async erstelleNeueSaison(context: AgentDialogContext, neueSaison:NeueSaison_1_0_0) : Promise<Saison_1_0_0>
     {
         if (!neueSaison.neueSaison?.name || neueSaison.neueSaison.name.trim() == "")
         {
@@ -34,7 +34,7 @@ export class SideEffects {
         };
     }
 
-    static async erstelleNeuenSponsor(context: DialogContext, neuerSponsor:NeuerSponsor_1_0_0) : Promise<Sponsor_1_0_0>
+    static async erstelleNeuenSponsor(context: AgentDialogContext, neuerSponsor:NeuerSponsor_1_0_0) : Promise<Sponsor_1_0_0>
     {
         if (!neuerSponsor.neuerSponsor?.name || neuerSponsor.neuerSponsor.name.trim() == "")
         {
@@ -52,7 +52,7 @@ export class SideEffects {
         };
     }
 
-    static async erstelleNeueRessource(context: DialogContext, neueRessource:NeueRessource_1_0_0) : Promise<Ressource_1_0_0>
+    static async erstelleNeueRessource(context: AgentDialogContext, neueRessource:NeueRessource_1_0_0) : Promise<Ressource_1_0_0>
     {
         if (!neueRessource.neueRessource?.name || neueRessource.neueRessource.name.trim() == "")
         {
@@ -79,7 +79,7 @@ export class SideEffects {
     }
 
 
-    static async erstelleNeuesProjekt(context: DialogContext, neuesProjekt:NeuesProjekt_1_0_0) : Promise<Projekt_1_0_0>
+    static async erstelleNeuesProjekt(context: AgentDialogContext, neuesProjekt:NeuesProjekt_1_0_0) : Promise<Projekt_1_0_0>
     {
         if (!neuesProjekt.neuesProjekt?.name || neuesProjekt.neuesProjekt.name.trim() == "")
         {
@@ -100,7 +100,7 @@ export class SideEffects {
     }
 
 
-    static async erstelleNeuesBudget(context: DialogContext, neuesBudget:NeuesBudget_1_0_0) : Promise<Budget_1_0_0>
+    static async erstelleNeuesBudget(context: AgentDialogContext, neuesBudget:NeuesBudget_1_0_0) : Promise<Budget_1_0_0>
     {
         if (!neuesBudget.neuesBudget?.name || neuesBudget.neuesBudget.name.trim() == "")
         {
@@ -123,7 +123,7 @@ export class SideEffects {
      * @param context
      * @param name Das Filterobjekt.
      */
-    private static async _findeSponsor(context: DialogContext, name: string) : Promise<Sponsor_1_0_0>
+    private static async _findeSponsor(context: AgentDialogContext, name: string) : Promise<Sponsor_1_0_0>
     {
         throw new Error("Not implemented");
     }

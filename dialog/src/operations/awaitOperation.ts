@@ -2,19 +2,19 @@ import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
 import {Operation} from "./operation";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class AwaitOperation<TStates extends string, TContext extends IDialogContext> extends Operation<TContext>
+export class AwaitOperation<TStates extends string> extends Operation
 {
-    readonly awaitPromise: (context: TContext, event: SchemaType) => Promise<SchemaType>;
+    readonly awaitPromise: (context: any, event: SchemaType, result: SchemaType) => Promise<SchemaType>;
 
-    constructor(awaitPromise: (context: TContext, event: SchemaType) => Promise<SchemaType>)
+    constructor(awaitPromise: (context: any, event: SchemaType, result: SchemaType) => Promise<SchemaType>)
     {
         super();
         this.awaitPromise = awaitPromise;
     }
 
-    async execute(context: TContext, event: SchemaType, result: SchemaType): Promise<SchemaType>
+    async execute(context: any, event: SchemaType, result: SchemaType): Promise<SchemaType>
     {
-        const awaitResult = await this.awaitPromise(context, event);
+        const awaitResult = await this.awaitPromise(context, event, result);
         return awaitResult;
     }
 }

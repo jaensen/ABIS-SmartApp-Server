@@ -4,9 +4,9 @@ import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/vo
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class CloseOperation<TContext extends IDialogContext> extends Operation<TContext>
+export class CloseOperation extends Operation
 {
-    async execute(context: TContext, event: SchemaType, result: SchemaType): Promise<SchemaType>
+    async execute(context: any, event: SchemaType, result: SchemaType): Promise<SchemaType>
     {
         await context.close();
         return <Void_1_0_0>{

@@ -5,20 +5,19 @@ import {RuntimeState} from "./runtime/runtimeState";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
 import {Log} from "@abis/log/dist/log";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
-
-export type DialogContext = IDialogContext & {jwt:string};
+import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 
 export abstract class Dialog
 {
     protected readonly _duplexChannel: IDuplexChannel;
-    protected _jwt: string;
+    protected readonly _session: Session_1_0_0;
 
-    private _runtime?:RuntimeDialog<string, DialogContext>;
+    private _runtime?:RuntimeDialog<string>;
 
-    protected constructor(duplexChannel: IDuplexChannel, jwt: string)
+    protected constructor(duplexChannel: IDuplexChannel, session: Session_1_0_0)
     {
         this._duplexChannel = duplexChannel;
-        this._jwt = jwt;
+        this._session = session;
     }
 
     get name()
@@ -34,7 +33,7 @@ export abstract class Dialog
         this._stopRequest = true;
     }
 
-    protected abstract build(): RuntimeState<string, DialogContext>[];
+    protected abstract build(): RuntimeState<string>[];
 
     async run(): Promise<void>
     {
@@ -43,8 +42,9 @@ export abstract class Dialog
         }
 
         const self = this;
-        const context = <DialogContext>{
-            jwt: this._jwt,
+        const context = <IDialogContext>{
+            jwt: this._session.jwt,
+            session: this._session,
             send(name: string, data: SchemaType): Promise<NewEntry_1_0_0>
             {
                 Log.log(self.name, "Sending message '" + name + "' from _Runtime:", data);
@@ -77,7 +77,7 @@ export abstract class Dialog
             }
         };
 
-        this._runtime = new RuntimeDialog<string, DialogContext>(this.build(), context);
+        this._runtime = new RuntimeDialog<string>(this.build(), context);
         await this._runtime.setState(this._runtime.context, "");
 
         for (; ;)

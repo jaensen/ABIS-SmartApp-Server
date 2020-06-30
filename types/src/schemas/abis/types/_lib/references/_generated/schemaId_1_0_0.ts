@@ -12,7 +12,5 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  */
 export interface SchemaId_1_0_0 {
    _$schemaId: SchemaTypes.SchemaId_1_0_0;
-
-  _$schemaId: string;
   [k: string]: unknown;
 }

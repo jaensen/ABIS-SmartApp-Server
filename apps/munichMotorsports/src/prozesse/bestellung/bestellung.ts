@@ -1,6 +1,5 @@
-import {Dialog, DialogContext} from "@abis/dialog/dist/dialog";
+import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
-import {RuntimeState} from "@abis/dialog/dist/runtime/runtimeState";
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {NeueBestellung_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/bestellung/_generated/neueBestellung_1_0_0";
@@ -11,15 +10,18 @@ import {Auftrag_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/f
 import {Verdingungsbogen_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/verdingungsbogen/_generated/verdingungsbogen_1_0_0";
 import {SideEffects} from "./sideEffects";
 import {Barkaufabrechnung_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/barkaufabrechnung/_generated/barkaufabrechnung_1_0_0";
+import {CompanionAgentDialogContext} from "@abis/dialog/dist/companionAgentDialogContext";
+import {Session} from "inspector";
+import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 
 export class Bestellung extends Dialog
 {
-    constructor(duplexChannel: IDuplexChannel, jwt: string)
+    constructor(duplexChannel: IDuplexChannel, session: Session_1_0_0)
     {
-        super(duplexChannel, jwt);
+        super(duplexChannel, session);
     }
 
-    protected build() : RuntimeState<string, DialogContext & {budgetGroupId:number}>[]
+    protected build()
     {
         const builder = new DialogBuilder<
             ""
@@ -28,7 +30,7 @@ export class Bestellung extends Dialog
             | "erfasse_barkauf"
             | "erfasse_auftrag"
             | "erfasse_verdingungsbogen"
-            , DialogContext & {budgetGroupId:number}>();
+            , CompanionAgentDialogContext>();
 
         // TODO: Validierung (gibt es überhaupt genügend Budget etc.)
         builder
@@ -51,22 +53,22 @@ export class Bestellung extends Dialog
             .when("erfasse_positionen")
 
                 .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
-                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 100)
+                        f => f.positionen.reduce((p, c) => p + ((c.menge ?? 0) * (c.preisJeEinheit ?? 0)), 0) <= 100)
                     .askFor(SchemaTypes.Barkaufabrechnung_1_0_0)
                     .goto("erfasse_barkauf")
 
                 .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
-                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 1000)
+                        f => f.positionen.reduce((p, c) => p + ((c.menge ?? 0) * (c.preisJeEinheit ?? 0)), 0) <= 100)
                     .askFor(SchemaTypes.Auftrag_1_0_0)
                     .goto("erfasse_auftrag")
 
                 .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
-                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) <= 10000)
+                        f => f.positionen.reduce((p, c) => p + ((c.menge ?? 0) * (c.preisJeEinheit ?? 0)), 0) <= 100)
                     .askFor(SchemaTypes.Verdingungsbogen_1_0_0)
                     .goto("erfasse_verdingungsbogen")
 
                 .on<ErfasseBestellpositionen_1_0_0>(SchemaTypes.ErfasseBestellpositionen_1_0_0,
-                        f => f.positionen.reduce((p, c) => p + (c.menge * c.preisJeEinheit), 0) > 10000)
+                        f => f.positionen.reduce((p, c) => p + ((c.menge ?? 0) * (c.preisJeEinheit ?? 0)), 0) <= 100)
                     .askFor(SchemaTypes.Verdingungsbogen_1_0_0)
                     .goto("erfasse_verdingungsbogen")
 

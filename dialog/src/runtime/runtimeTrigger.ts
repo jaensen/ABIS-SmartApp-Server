@@ -5,15 +5,15 @@ import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/vo
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class RuntimeTrigger<TStates extends string, TContext extends IDialogContext>
+export class RuntimeTrigger<TStates extends string>
 {
-    readonly root: TriggerBuilder<TStates, TContext, any, any>;
-    readonly chain: TriggerBuilder<TStates, TContext, any, any>[];
-    readonly ops: Operation<TContext>[];
+    readonly root: TriggerBuilder<TStates, any, any, any>;
+    readonly chain: TriggerBuilder<TStates, any, any, any>[];
+    readonly ops: Operation[];
 
-    constructor(root: TriggerBuilder<TStates, TContext, any, any>,
-                chain: TriggerBuilder<TStates, TContext, any, any>[],
-                ops: Operation<TContext>[])
+    constructor(root: TriggerBuilder<TStates, any, any, any>,
+                chain: TriggerBuilder<TStates, any, any, any>[],
+                ops: Operation[])
     {
         this.root = root;
         this.chain = chain;
@@ -26,7 +26,7 @@ export class RuntimeTrigger<TStates extends string, TContext extends IDialogCont
         return this.root.eventType == event._$schemaId && filter(event);
     }
 
-    async execute(context:TContext, event:SchemaType) : Promise<void>
+    async execute(context:any, event:SchemaType) : Promise<void>
     {
         let result:SchemaType = <Void_1_0_0>{ _$schemaId: SchemaTypes.Void_1_0_0 };
 

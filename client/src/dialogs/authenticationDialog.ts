@@ -1,20 +1,21 @@
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
-import {Dialog, DialogContext} from "@abis/dialog/dist/dialog";
+import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
 import {RuntimeState} from "@abis/dialog/dist/runtime/runtimeState";
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
 import {getUserInput} from "../sideEffects/getUserInput";
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class AuthenticationDialog extends Dialog
 {
-    constructor(duplexChannel: IDuplexChannel, jwt: string)
+    constructor(duplexChannel: IDuplexChannel, session:Session_1_0_0)
     {
-        super(duplexChannel, jwt);
+        super(duplexChannel, session);
     }
 
-    protected build() : RuntimeState<string, DialogContext>[]
+    protected build() : RuntimeState<string>[]
     {
         const builder = new DialogBuilder<
             ""
@@ -22,7 +23,7 @@ export class AuthenticationDialog extends Dialog
             | "challenge_sent"
             | "login_sent"
             | "authorized",
-            DialogContext>();
+            AgentDialogContext>();
 
         // TODO: Handle retries (Retry_1_0_0 events)
         builder

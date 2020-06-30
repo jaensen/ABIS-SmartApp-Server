@@ -142,7 +142,7 @@ export class TriggerBuilder<
                 _$schemaId: SchemaTypes.AskFor_1_0_0,
                 next: SchemaTypes.Verdingungsbogen_1_0_0
             }
-        });
+        })
     }
 
     sendResult() : TriggerBuilder<TStates, TContext, TEvent, TResult>

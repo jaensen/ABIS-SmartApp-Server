@@ -6,13 +6,13 @@ import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
 import {Log} from "@abis/log/dist/log";
 import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
-export class RuntimeDialog<TStates extends string, TContext extends IDialogContext>
+export class RuntimeDialog<TStates extends string>
 {
-    context:TContext;
-    states:RuntimeState<TStates, TContext>[];
-    currentState?:RuntimeState<TStates, TContext>
+    context:any;
+    states:RuntimeState<TStates>[];
+    currentState?:RuntimeState<TStates>
 
-    constructor(build: RuntimeState<TStates, TContext>[], context: TContext)
+    constructor(build: RuntimeState<TStates>[], context: any)
     {
         this.states = build;
         this.context = context;
@@ -24,7 +24,7 @@ export class RuntimeDialog<TStates extends string, TContext extends IDialogConte
         }
     }
 
-    async setState(context:TContext, nextStateName:string)
+    async setState(context:any, nextStateName:string)
     {
         const nextState = this.states.find(o => o.name == nextStateName);
         if (!nextState)
@@ -35,7 +35,7 @@ export class RuntimeDialog<TStates extends string, TContext extends IDialogConte
         this.currentState = nextState;
         Log.log("_Runtime", "Set state '" + this.currentState.name + "'");
 
-        let defaultTrigger: RuntimeTrigger<any, any> | undefined;
+        let defaultTrigger: RuntimeTrigger<any> | undefined;
 
         const defaultTriggers = nextState.triggers.filter(o => o.root.eventType == SchemaTypes.Void_1_0_0);
         if (defaultTriggers.length > 1)
