@@ -9,6 +9,7 @@ $ git clone https://github.com/ABISCloud/ABIS-OS1-Server.git
 ```
 **Prerequisits: 
 Install latest postgre: sudo apt-get install postgresql-11
+```
 $ sudo su postgres
 $ psql
 > CREATE USER abis WITH PASSWORD '123';
@@ -19,10 +20,11 @@ $ exit
 # Test if the database connection works:
 $ psql -h localhost -U abis -W postgres
 > \q
+```
 
 **2) Adjust the database config**  
   
-Provide your own connection string in _data/src/schema.prisma_:
+Provide your own connection string in _data/src/schema.prisma_: (should be default @abis pw: 123)
 ```  
 datasource db {
     provider = "postgresql"
