@@ -7,6 +7,9 @@ It is based on [Apollo Server](https://www.apollographql.com/docs/apollo-server/
 ```
 $ git clone https://github.com/ABISCloud/ABIS-OS1-Server.git
 ```
+**Prerequisits: 
+Install latest postgre: sudo apt-get install postgresql-11
+
 **2) Adjust the database config**  
   
 Provide your own connection string in _data/src/schema.prisma_:
