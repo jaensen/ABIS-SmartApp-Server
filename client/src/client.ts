@@ -23,9 +23,9 @@ import ws from "ws";
 import {fetch} from 'cross-fetch'
 import {Helper} from "@abis/interfaces/dist/helper";
 import {
-    createSession,
-    createSessionMutation,
-    createSessionMutationVariables, Exact,
+    CreateSession,
+    CreateSessionMutation,
+    CreateSessionMutationVariables, Exact,
     NewEvent,
     NewEventSubscriptionVariables, Send, SendMutation, SendMutationVariables
 } from "./generated/abis-api";
@@ -167,8 +167,8 @@ export class ClientProxy
         if (!this._client)
             throw new Error("Call connect() first.");
 
-        const session = await this._client.mutate<createSessionMutation, createSessionMutationVariables>({
-            mutation: createSession
+        const session = await this._client.mutate<CreateSessionMutation, CreateSessionMutationVariables>({
+            mutation: CreateSession
         });
 
         if (!session.data?.createSession.success)
