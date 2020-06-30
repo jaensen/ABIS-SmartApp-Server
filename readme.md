@@ -9,6 +9,16 @@ $ git clone https://github.com/ABISCloud/ABIS-OS1-Server.git
 ```
 **Prerequisits: 
 Install latest postgre: sudo apt-get install postgresql-11
+$ sudo su postgres
+$ psql
+> CREATE USER abis WITH PASSWORD '123';
+> ALTER USER abis WITH SUPERUSER;
+> \q
+$ exit
+
+# Test if the database connection works:
+$ psql -h localhost -U abis -W postgres
+> \q
 
 **2) Adjust the database config**  
   
@@ -21,7 +31,7 @@ datasource db {
 ```
 **3) Install dependencies, generate code and build:**
 ```  
-$ cd ABIS-OS1-Gamma
+$ cd ABIS-OS1-Server
 $ ./clean.sh
 ```
 **4) Deploy the database** 
