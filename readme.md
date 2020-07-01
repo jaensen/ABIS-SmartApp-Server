@@ -50,6 +50,7 @@ $ cd ../../server
 $ node dist/main.js
 ```
 **6) Generate the client code**
+In a new terminal window continue with as follows
 ```  
 $ cd client
 $ npm run generate
