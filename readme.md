@@ -24,7 +24,7 @@ $ psql -h localhost -U abis -W postgres
 
 **2) Adjust the database config**  
   
-Provide your own connection string in _data/src/schema.prisma_: (should be default @abis pw: 123)
+Provide your own connection string in _data/src/schema.prisma_: (should be default datbase:postgres user:abis pw: 123)
 ```  
 datasource db {
     provider = "postgresql"
