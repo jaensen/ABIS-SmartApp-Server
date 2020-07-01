@@ -62,6 +62,13 @@ npm install
 npx tsc
 cd .. || exit
 
+cd ../apps/munichMotorsports || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+npx tsc
+cd .. || exit
+
 cd ../client || exit
 rm -f package-lock.json
 rm -r -f dist

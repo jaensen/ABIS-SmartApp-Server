@@ -102,7 +102,7 @@ export class ClientProxy
         };
 
         const subscriptionLink = new WebSocketLink({
-            webSocketImpl: ws,
+            webSocketImpl: window ? WebSocket :  ws,
             uri: 'ws://' + this._host + '/graphql',
             options: {
                 reconnect: true,

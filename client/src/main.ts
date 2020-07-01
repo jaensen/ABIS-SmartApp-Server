@@ -4,15 +4,17 @@ export class Main
 {
     async run()
     {
-        const clientProxy = new ClientProxy("localhost:4000");
-        await clientProxy.connect();
+        (<any>window).abisClientProxy = new ClientProxy("localhost:4000");
+        await (<any>window).abisClientProxy.connect();
 
-        const client = new Client(clientProxy);
-        await client.connect();
 
-        const authDialog = await client.newDialog(1, false, "./dialogs/authenticationDialog");
+        (<any>window).abis = new Client((<any>window).abisClientProxy);
+        await (<any>window).abis.connect();
+
+        const authDialog = await (<any>window).abis.newDialog(1, false, "./dialogs/authenticationDialog");
         authDialog.run();
     }
 }
+
 
 new Main().run();
