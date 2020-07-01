@@ -57,7 +57,7 @@ $ npm run generate
 ```
 for testing run again. Should run without any errors then
 ```
-$ ./clean.sh
+$ cd ../ ./clean.sh
 ```
 
 ## What is it?
