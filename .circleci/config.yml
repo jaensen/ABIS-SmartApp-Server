@@ -2,7 +2,8 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  build-and-test:
+  build:
+    resource_class: small
     executor:
       name: node/default
     steps:
@@ -21,9 +22,9 @@ jobs:
             - run: cd server && rm -f package-lock.json && rm -r -f dist  && npm install && npm run generate && npx tsc
             - run: cd apps/abis && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
-            - run: cd client && browserify dist/main.js bundle.js
+            - run: cd client && npx browserify dist/main.js bundle.js
 
 workflows:
-    build-and-test:
+    build:
       jobs:
-        - build-and-test
+        - build
