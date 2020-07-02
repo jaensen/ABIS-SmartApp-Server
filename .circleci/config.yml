@@ -1,0 +1,28 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: cd types && rm -f package-lock.json && rm -r -f dist && npm install && npx tsc
+            - run: cd log && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd interfaces && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd data && rm -f package-lock.json && rm -r -f dist  && npm install
+            - run: cd data/src && npx prisma generate
+            - run: cd data && npx tsc
+            - run: cd events && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd dialog && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd agents && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd server && rm -f package-lock.json && rm -r -f dist  && npm install && npm run generate && npx tsc
+            - run: cd apps/abis && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            
+workflows:
+    build-and-test:
+      jobs:
+        - build-and-test
