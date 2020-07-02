@@ -25,9 +25,12 @@ import {Helper} from "@abis/interfaces/dist/helper";
 import {
     createSession,
     createSessionMutation,
-    createSessionMutationVariables, Exact,
+    createSessionMutationVariables,
     NewEvent,
-    NewEventSubscriptionVariables, Send, SendMutation, SendMutationVariables
+    NewEventSubscriptionVariables,
+    Send,
+    SendMutation,
+    SendMutationVariables
 } from "./generated/abis-api";
 
 export type EventFilter<TEvent extends SchemaType> = (e: TEvent) => boolean;
@@ -206,7 +209,40 @@ export class ClientProxy
     }
 }
 
-export class Client
+interface IClient
+{
+    connect(): Promise<void>;
+
+    disconnect(): void;
+
+    run(): Promise<void>;
+
+    newDialog(withAgentId: number, volatile: boolean, implementation: string): Promise<any>;
+
+    /**
+     * Creates a new DuplexChannel between the current agent (identified by its session)
+     * and the specified other agent.
+     * @param withAgentId The other agent.
+     */
+    newDuplexChannel(withAgentId: number, volatile: boolean): Promise<IDuplexChannel>;
+
+    send(event: SchemaType): Promise<void>;
+
+    /**
+     * Waits for the specified event.
+     * @param eventType A value of the SchemaType enumeration
+     * @param eventFilter An optional filter predicate
+     * @param timeoutMs An optional timeout (default: 10000 milliseconds. Supply a value smaller than 1 for infinite)
+     */
+    receive<T extends SchemaType>(
+        eventType: SchemaTypes,
+        eventFilter: EventFilter<T>,
+        timeoutMs: number): Promise<T>;
+
+    newTimeout<T>(timeoutInMs: number): Promise<T>;
+}
+
+export class Client implements IClient
 {
     private readonly _proxy: ClientProxy;
     private _session?: Session_1_0_0;
@@ -237,7 +273,7 @@ export class Client
         this._stopRequest = true;
     }
 
-    private async run()
+    async run()
     {
         if (!this._events)
         {
@@ -260,6 +296,7 @@ export class Client
 
     async newDialog(withAgentId: number, volatile: boolean, implementation: string)
     {
+        // TODO: Provide a way to simply pass in a factory that creates the instance
         if (!this._session)
         {
             throw new Error("Call connect() first.")
@@ -432,7 +469,7 @@ export class Client
         }
     }
 
-    private newTimeout<T>(timeoutInMs: number)
+    newTimeout<T>(timeoutInMs: number)
     {
         return new Promise<T>(((resolve, reject) =>
         {

@@ -8,11 +8,13 @@ export class Main
         await (<any>window).abisClientProxy.connect();
 
 
-        (<any>window).abis = new Client((<any>window).abisClientProxy);
-        await (<any>window).abis.connect();
+        //let abisClient: IClient = new Client((<any>window).abisClientProxy);
 
-        const authDialog = await (<any>window).abis.newDialog(1, false, "./dialogs/authenticationDialog");
-        authDialog.run();
+        //(<any>window).abis = abisClient;
+        //await (<any>window).abis.connect();
+
+        //const authDialog = await (<any>window).abis.newDialog(1, false, "./dialogs/authenticationDialog");
+        //authDialog.run();
     }
 }
 
