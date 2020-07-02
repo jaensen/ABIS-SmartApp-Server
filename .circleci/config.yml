@@ -22,7 +22,7 @@ jobs:
             - run: cd server && rm -f package-lock.json && rm -r -f dist  && npm install && npm run generate && npx tsc
             - run: cd apps/abis && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
-            - run: cd client && npx browserify dist/main.js bundle.js
+            - run: cd client && npx browserify dist/main.js > bundle.js
 
 workflows:
     build:
