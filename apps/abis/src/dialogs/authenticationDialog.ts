@@ -13,7 +13,6 @@ import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
 import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/void_1_0_0";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
-import {IDialogContext} from "@abis/interfaces/dist/dialogContext";
 
 export class AuthenticationDialog extends Dialog
 {
