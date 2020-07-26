@@ -23,20 +23,25 @@ import ws from "ws";
 import {fetch} from 'cross-fetch'
 import {Helper} from "@abis/interfaces/dist/helper";
 import {
-    createSession,
-    createSessionMutation,
-    createSessionMutationVariables,
     NewEvent,
     NewEventSubscriptionVariables,
     Send,
     SendMutation,
-    SendMutationVariables
+    SendMutationVariables,
+    MyServer,
+    MyServerQueryVariables,
+    Server,
+    CreateSessionMutation,
+    CreateSessionMutationVariables, CreateSession
 } from "./generated/abis-api";
 import {Dialog} from "@abis/dialog/dist/dialog";
 import {isBrowser} from "./main";
 
 export type EventFilter<TEvent extends SchemaType> = (e: TEvent) => boolean;
 
+/**
+ * Provides a DuplexChannel to the connected profile-Agent.
+ */
 export class ClientProxy
 {
     private readonly _host: string;
@@ -64,6 +69,20 @@ export class ClientProxy
             throw new Error("Call connect() first!");
 
         return this._session;
+    }
+
+    public get myServer() : Promise<IServer>
+    {
+        const self = this;
+        return new Promise<IServer>(async (r) => r(<IServer>{
+            async systemAgents(): Promise<{ id: number; name: string }[]>
+            {
+                const agents = await self.client.query<Server, MyServerQueryVariables>({
+                    query: MyServer
+                });
+                return (<any>agents.data).myServer.systemAgents;
+            }
+        }));
     }
 
     public constructor(host: string)
@@ -173,8 +192,8 @@ export class ClientProxy
         if (!this._client)
             throw new Error("Call connect() first.");
 
-        const session = await this._client.mutate<createSessionMutation, createSessionMutationVariables>({
-            mutation: createSession
+        const session = await this._client.mutate<CreateSessionMutation, CreateSessionMutationVariables>({
+            mutation: CreateSession
         });
 
         if (!session.data?.createSession.success)
@@ -212,6 +231,11 @@ export class ClientProxy
     }
 }
 
+interface IServer
+{
+    systemAgents() : Promise<{id:number, name:string}[]>
+}
+
 interface IClient
 {
     connect(): Promise<void>;
@@ -243,6 +267,8 @@ interface IClient
         timeoutMs: number): Promise<T>;
 
     newTimeout<T>(timeoutInMs: number): Promise<T>;
+
+    myServer() : Promise<IServer>;
 }
 
 export class Client implements IClient
@@ -483,6 +509,11 @@ export class Client implements IClient
             Log.error("Client", "An error occurred while the client was waiting for an event:", e);
             throw e;
         }
+    }
+
+    async myServer() : Promise<IServer>
+    {
+        return this._proxy.myServer;
     }
 
     newTimeout<T>(timeoutInMs: number, waitingFor?: string)

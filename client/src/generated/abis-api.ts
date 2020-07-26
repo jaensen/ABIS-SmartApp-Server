@@ -168,10 +168,10 @@ export enum CacheControlScope {
 }
 
 
-export type createSessionMutationVariables = Exact<{ [key: string]: never; }>;
+export type CreateSessionMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type createSessionMutation = (
+export type CreateSessionMutation = (
   { __typename?: 'Mutation' }
   & { createSession: (
     { __typename?: 'CreateSessionResponse' }
@@ -192,6 +192,20 @@ export type SendMutation = (
   )> }
 );
 
+export type MyServerQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyServerQuery = (
+  { __typename?: 'Query' }
+  & { myServer: (
+    { __typename?: 'Server' }
+    & { systemAgents: Array<(
+      { __typename?: 'Agent' }
+      & Pick<Agent, 'id' | 'name'>
+    )> }
+  ) }
+);
+
 export type NewEventSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -201,7 +215,7 @@ export type NewEventSubscription = (
 );
 
 
-export const createSession = gql`
+export const CreateSession = gql`
     mutation createSession {
   createSession {
     success
@@ -215,6 +229,16 @@ export const Send = gql`
   send(event: $event) {
     success
     errorMessage
+  }
+}
+    `;
+export const MyServer = gql`
+    query myServer {
+  myServer {
+    systemAgents {
+      id
+      name
+    }
   }
 }
     `;

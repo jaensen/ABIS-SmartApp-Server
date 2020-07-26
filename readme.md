@@ -2,6 +2,9 @@
 This repository contains the server component of abis. The server provides a GraphQL-API and comes with a client library.  
 It is based on [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [Prisma 2](https://www.prisma.io/).
 
+## Prerequisites
+We assume you're using linux and have postgresql 11 or later already installed.
+
 ## Quickstart
 **1) Clone the repository:**  
 ```
@@ -34,11 +37,9 @@ $ npx prisma migrate up --experimental
 $ cd server
 $ node dist/main.js
 ```
-**6) Generate the client code**
-```  
-$ cd client
-$ npm run generate
-```
+**6) Use the client to interact with the server**  
+Refer to _[client/readme.md](client)_ for examples on how to communicate with a running server.
+
 
 ## What is it?
 ABIS Server is a bare-bones collaboration server that is targeted at 

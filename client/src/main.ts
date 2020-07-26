@@ -20,7 +20,18 @@ if (isBrowser) {
         const abisClient = new Client(clientProxy);
         await abisClient.connect();
 
-        const dialog = abisClient.newDialog(3, false, "../../apps/abis/client/dist/dialogs/authenticationDialog")
+        const server = await abisClient.myServer();
+        const systemAgents = await server.systemAgents();
+
+        const authenticationAgent = systemAgents.find(o => o.name == "authentication");
+        if (!authenticationAgent) {
+            throw new Error("Couldn't find the 'authentication' agent on the server.")
+        }
+
+        const dialog = await abisClient.newDialog(
+            authenticationAgent.id
+            , false
+            , "../../apps/abis/client/dist/dialogs/authenticationDialog")
     }
     f();
 }
