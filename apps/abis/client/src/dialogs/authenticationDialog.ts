@@ -76,29 +76,31 @@ class AuthenticationDialog extends Dialog
     {
         return function (p1: AgentDialogContext, p2: SchemaType, p3: SchemaType)
         {
-            if (type == SchemaTypes.Signup_1_0_0) {
-                return <Signup_1_0_0>{
-                    _$schemaId: SchemaTypes.Signup_1_0_0,
-                    email: "hans@peter.de",
-                    password: "123",
-                    passwordConfirmation: "123",
-                    firstName: "Hans",
-                    lastName: "Peter",
-                    timezoneOffset: -120
+            return new Promise<SchemaType>((resolve, reject) => {
+                if (type == SchemaTypes.Signup_1_0_0) {
+                    resolve(<Signup_1_0_0>{
+                        _$schemaId: SchemaTypes.Signup_1_0_0,
+                        email: "hans@peter.de",
+                        password: "123",
+                        passwordConfirmation: "123",
+                        firstName: "Hans",
+                        lastName: "Peter",
+                        timezoneOffset: -120
+                    });
+                } else if (type == SchemaTypes.Challenge_1_0_0) {
+                    resolve(<Challenge_1_0_0>{
+                        _$schemaId: SchemaTypes.Challenge_1_0_0,
+                        code: "123"
+                    });
+                } else if (type == SchemaTypes.Login_1_0_0) {
+                    resolve(<Login_1_0_0>{
+                        _$schemaId: SchemaTypes.Login_1_0_0,
+                        email: "hans@peter.de",
+                        password: "123"
+                    });
                 }
-            } else if (type == SchemaTypes.Challenge_1_0_0) {
-                return <Challenge_1_0_0>{
-                    _$schemaId: SchemaTypes.Challenge_1_0_0,
-                    code: "123"
-                }
-            } else if (type == SchemaTypes.Login_1_0_0) {
-                return <Login_1_0_0>{
-                    _$schemaId: SchemaTypes.Login_1_0_0,
-                    email: "hans@peter.de",
-                    password: "123"
-                }
-            }
-            throw new Error("")
+                throw new Error("")
+            });
         };
     }
 }
