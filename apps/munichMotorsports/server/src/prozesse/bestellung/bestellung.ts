@@ -1,18 +1,17 @@
 import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
+import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
-import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
+import {CompanionAgentDialogContext} from "@abis/dialog/dist/companionAgentDialogContext";
 import {NeueBestellung_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/bestellung/_generated/neueBestellung_1_0_0";
+import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
 import {WaehleBudget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/bestellung/_generated/waehleBudget_1_0_0";
 import {ErfasseBestellpositionen_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/bestellung/_generated/erfasseBestellpositionen_1_0_0";
+import {Barkaufabrechnung_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/barkaufabrechnung/_generated/barkaufabrechnung_1_0_0";
+import {SideEffects} from "./sideEffects";
 import {Auftrag_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/auftrag/_generated/auftrag_1_0_0";
 import {Verdingungsbogen_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/verdingungsbogen/_generated/verdingungsbogen_1_0_0";
-import {SideEffects} from "./sideEffects";
-import {Barkaufabrechnung_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/barkaufabrechnung/_generated/barkaufabrechnung_1_0_0";
-import {CompanionAgentDialogContext} from "@abis/dialog/dist/companionAgentDialogContext";
-import {Session} from "inspector";
-import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
 
 export class Bestellung extends Dialog
 {

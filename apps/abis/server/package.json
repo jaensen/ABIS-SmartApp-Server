@@ -1,5 +1,5 @@
 {
-  "name": "@abis/apps_munichMotorsports",
+  "name": "@abis/apps.abis.server",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -11,11 +11,11 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@abis/types": "../../types",
-    "@abis/interfaces": "../../interfaces",
-    "@abis/events": "../../events",
-    "@abis/dialog": "../../dialog",
-    "@abis/agents": "../../agents",
-    "@abis/log": "../../log"
+    "@abis/types": "../../../types",
+    "@abis/interfaces": "../../../interfaces",
+    "@abis/events": "../../../events",
+    "@abis/dialog": "../../../dialog",
+    "@abis/agents": "../../../agents",
+    "@abis/log": "../../../log"
   }
 }

@@ -1,8 +1,8 @@
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 import {Group_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/group_1_0_0";
 import {Agent_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/agent_1_0_0";
-import {NewEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/notifications/_generated/newEntry_1_0_0";
 import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
+import {NewEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/notifications/_generated/newEntry_1_0_0";
 
 export class SideEffects {
 
@@ -13,7 +13,6 @@ export class SideEffects {
      */
     public static async createGroup(context: AgentDialogContext, name: string) : Promise<Group_1_0_0>
     {
-
         throw new Error("Not implemented");
     }
 

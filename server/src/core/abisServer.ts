@@ -63,7 +63,7 @@ export class AbisServer
         this._systemUsers.push({email: anonUser.email, id: anonUser.id});
 
         Log.log("Server", "Creating system agents ..")
-        const authenticationAgent = await this._agentRepo.ensureSingletonAgentExists("authentication", "../apps/abis/dist/authenticationAgent");
+        const authenticationAgent = await this._agentRepo.ensureSingletonAgentExists("authentication", "../apps/abis/server/dist/authenticationAgent");
         this._systemAgents.push(authenticationAgent);
 
         Log.log("Server", "Creating session for system agent '" + authenticationAgent.name + "' (id: " + authenticationAgent.id + ") ..");

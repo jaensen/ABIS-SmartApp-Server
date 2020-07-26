@@ -1,19 +1,19 @@
-import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
-import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
-import {CreateChannel_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/createChannel_1_0_0";
-import {CreateEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/createEntry_1_0_0";
-import {CloseChannel_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/closeChannel_1_0_0";
-import {RuntimeAgent} from "@abis/agents/dist/runtimeAgent";
-import {Emitter} from "@abis/events/dist/emitter";
-import {IEventPublisher} from "@abis/interfaces/dist/eventPublisher";
-import {IAgentData} from "@abis/interfaces/dist/agentData";
-import {Log} from "@abis/log/dist/log";
-
 /**
  * This kind of agent is primarily controlled by the client.
  * It executes all commands that the client sends to it and further handles notifications etc. for a profile.
  * This includes e.g.: creating channels, creating entries, closing channels ..
  */
+import {RuntimeAgent} from "@abis/agents/dist/runtimeAgent";
+import {Emitter} from "@abis/events/dist/emitter";
+import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
+import {IEventPublisher} from "@abis/interfaces/dist/eventPublisher";
+import {IAgentData} from "@abis/interfaces/dist/agentData";
+import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
+import {CreateChannel_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/createChannel_1_0_0";
+import {Log} from "@abis/log/dist/log";
+import {CreateEntry_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/createEntry_1_0_0";
+import {CloseChannel_1_0_0} from "@abis/types/dist/schemas/abis/types/events/commands/_generated/closeChannel_1_0_0";
+
 export class ProfileAgent extends RuntimeAgent
 {
     constructor(id:number, eventSource:Emitter<SchemaType>, eventPublisher:IEventPublisher, agentData: IAgentData)

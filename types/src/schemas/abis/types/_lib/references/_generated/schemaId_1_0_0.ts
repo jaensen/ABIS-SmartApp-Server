@@ -11,6 +11,8 @@ import { SchemaTypes } from "../../../../../_generated/schemaTypes";
  * Contains the '_$schemaId' attribute which is used to mark an object with a specific SchemaType.
  */
 export interface SchemaId_1_0_0 {
+   _$schemaId: SchemaTypes.SchemaId_1_0_0;
+
   _$schemaId: string;
   [k: string]: unknown;
 }

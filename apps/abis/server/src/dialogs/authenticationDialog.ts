@@ -1,18 +1,18 @@
+import {Dialog} from "@abis/dialog/dist/dialog";
+import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
+import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
+import {RuntimeState} from "@abis/dialog/dist/runtime/runtimeState";
+import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/signup_1_0_0";
 import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
-import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
-import {Dialog} from "@abis/dialog/dist/dialog";
-import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
-import {RuntimeState} from "@abis/dialog/dist/runtime/runtimeState";
 import {ChangePassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/changePassword_1_0_0";
+import {AskFor_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/interactionPatterns/_generated/askFor_1_0_0";
 import {Challenge_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/challenge_1_0_0";
-import {SetPassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/setPassword_1_0_0";
 import {ResetPassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/resetPassword_1_0_0";
-import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
+import {SetPassword_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/setPassword_1_0_0";
 import {Void_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/_generated/void_1_0_0";
-import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class AuthenticationDialog extends Dialog
 {

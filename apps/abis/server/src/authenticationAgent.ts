@@ -4,7 +4,7 @@ export class AuthenticationAgent extends DialogAgent
 {
     protected get dialogImplementation(): string
     {
-        return "../../../apps/abis/dist/dialogs/authenticationDialog";
+        return "../../apps/abis/server/dist/dialogs/authenticationDialog";
     }
 }
 export const Class = AuthenticationAgent;

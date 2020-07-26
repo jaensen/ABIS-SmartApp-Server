@@ -55,19 +55,26 @@ npm install
 npm run generate
 npx tsc
 
-cd ../apps/abis || exit
+cd ../apps/abis/server || exit
 rm -f package-lock.json
 rm -r -f dist
 npm install
 npx tsc
-cd .. || exit
+cd ../.. || exit
 
-cd ../apps/munichMotorsports || exit
+cd ../apps/abis/client || exit
 rm -f package-lock.json
 rm -r -f dist
 npm install
 npx tsc
-cd .. || exit
+cd ../.. || exit
+
+cd ../apps/munichMotorsports/server || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+npx tsc
+cd ../.. || exit
 
 cd ../client || exit
 rm -f package-lock.json

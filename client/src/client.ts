@@ -32,6 +32,8 @@ import {
     SendMutation,
     SendMutationVariables
 } from "./generated/abis-api";
+import {Dialog} from "@abis/dialog/dist/dialog";
+import {isBrowser} from "./main";
 
 export type EventFilter<TEvent extends SchemaType> = (e: TEvent) => boolean;
 
@@ -104,8 +106,9 @@ export class ClientProxy
             clientTimezoneOffset: new Date().getTimezoneOffset()
         };
 
+        const wsImpl = !isBrowser ?  ws : WebSocket;
         const subscriptionLink = new WebSocketLink({
-            webSocketImpl: window ? WebSocket :  ws,
+            webSocketImpl: wsImpl,
             uri: 'ws://' + this._host + '/graphql',
             options: {
                 reconnect: true,
@@ -157,7 +160,7 @@ export class ClientProxy
                 query: NewEvent
             }).subscribe(next =>
             {
-                const newEvent = <SchemaType>(<any>next.data).newEntry;
+                const newEvent = <SchemaType>(<any>next.data).event;
                 this._clientEventBroker.publishDirect(session.owner, newEvent);
             });
 
@@ -302,12 +305,24 @@ export class Client implements IClient
             throw new Error("Call connect() first.")
         }
 
-        const impl = await import(implementation);
+        const req = <any>require;
 
-        const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
-        const dialog = new impl.Class(duplexChannel, this._session.jwt);
-        dialog.run();
-        return dialog;
+        return new Promise<Dialog>((async resolve => {
+            if (isBrowser){
+                const impl = req([implementation], async (result:any) => {
+                    const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
+                    const dialog = new result.Class(duplexChannel, this._session?.jwt);
+                    dialog.run();
+                    resolve(dialog);
+                });
+            } else {
+                const impl = await import(implementation);
+                const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
+                const dialog = new impl.Class(duplexChannel, this._session?.jwt);
+                dialog.run();
+                resolve(dialog);
+            }
+        }));
     }
 
     /**
@@ -457,26 +472,27 @@ export class Client implements IClient
             const candidates = [receivedEvent];
             if (timeoutMs > 0)
             {
-                candidates.push(this.newTimeout<T>(timeoutMs));
+                candidates.push(this.newTimeout<T>(timeoutMs, eventType));
             }
+
+            // Race between handler and timeout
             return await Promise.race(candidates);
         }
         catch (e)
         {
-            // Todo: the 'rejected' Error object (should be 'e'?!) is not written to the log
             Log.error("Client", "An error occurred while the client was waiting for an event:", e);
             throw e;
         }
     }
 
-    newTimeout<T>(timeoutInMs: number)
+    newTimeout<T>(timeoutInMs: number, waitingFor?: string)
     {
         return new Promise<T>(((resolve, reject) =>
         {
             setTimeout(
                 () =>
                 {
-                    const error = new Error("The waiting operation timed out after " + timeoutInMs + " milliseconds.");
+                    const error = new Error("The wait operation timed out after " + timeoutInMs + " milliseconds while waiting for: " + waitingFor ?? "<unknown>");
                     reject(error);
                 },
                 timeoutInMs);

@@ -1,8 +1,8 @@
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 import {BudgetReservierung_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/budget/_generated/budgetReservierung_1_0_0";
 import {Auftrag_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/auftrag/_generated/auftrag_1_0_0";
 import {Verdingungsbogen_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/verdingungsbogen/_generated/verdingungsbogen_1_0_0";
 import {Barkaufabrechnung_1_0_0} from "@abis/types/dist/schemas/hochschuleMünchen/types/formulare/barkaufabrechnung/_generated/barkaufabrechnung_1_0_0";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class SideEffects
 {

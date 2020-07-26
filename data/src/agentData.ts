@@ -83,6 +83,10 @@ export class FindGroup implements IFindGroup
             && foundGroup.memberships.length == 0)
             return undefined; // TODO: Log warning
 
+        if (foundGroup.ownerAgentId == agent.id) {
+            return this._groupRepos.findGroupById(groupId);
+        }
+
         return <Group_1_0_0>{
             _$schemaId: SchemaTypes.Group_1_0_0,
             id: foundGroup.id,

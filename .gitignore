@@ -6,7 +6,7 @@
 /data/node_modules
 /data/dist
 /apps/abis/node_modules
-/apps/abis/dist
+/apps/abis/server/dist
 /dialog/node_modules
 /dialog/dist
 /events/node_modules
@@ -19,3 +19,5 @@
 /server/dist
 /types/node_modules
 /types/dist
+/apps/abis/client/dist/
+/apps/munichMotorsports/server/dist/

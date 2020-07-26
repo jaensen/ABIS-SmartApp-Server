@@ -9,6 +9,8 @@ import {
 import {AbisServer} from "../core/abisServer";
 import {ConnectionContext} from "./connectionContext";
 import {Log} from "@abis/log/dist/log";
+import { from } from 'ix/asynciterable';
+import { filter, map } from 'ix/asynciterable/operators';
 
 export class ApolloResolvers
 {
@@ -51,7 +53,15 @@ export class ApolloResolvers
 
                     Log.log("SubscriptionResolvers", "New subscriber:", agent);
 
-                    return abisServer.eventBroker.subscribe(agent.id);
+                    const iterator = abisServer.eventBroker.subscribe(agent.id);
+
+                    const wrapped = from(iterator).pipe(map(o => {
+                        return {
+                            event: o
+                        }
+                    }))
+
+                    return wrapped;
                 }
             }
         };

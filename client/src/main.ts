@@ -1,22 +1,26 @@
 import {Client, ClientProxy} from "./client";
 
-export class Main
-{
-    async run()
-    {
-        (<any>window).abisClientProxy = new ClientProxy("localhost:4000");
-        await (<any>window).abisClientProxy.connect();
+export const isBrowser = typeof window !== "undefined";
 
+if (isBrowser) {
+    (<any>window).abisClient = new Promise<Client>(async (resolve, reject) => {
+        const clientProxy = new ClientProxy("localhost:4000");
+        await clientProxy.connect();
 
-        //let abisClient: IClient = new Client((<any>window).abisClientProxy);
+        const abisClient = new Client(clientProxy);
+        await abisClient.connect();
 
-        //(<any>window).abis = abisClient;
-        //await (<any>window).abis.connect();
+        resolve(abisClient);
+    });
+} else {
+    const f = async () => {
+        const clientProxy = new ClientProxy("localhost:4000");
+        await clientProxy.connect();
 
-        //const authDialog = await (<any>window).abis.newDialog(1, false, "./dialogs/authenticationDialog");
-        //authDialog.run();
+        const abisClient = new Client(clientProxy);
+        await abisClient.connect();
+
+        const dialog = abisClient.newDialog(3, false, "../../apps/abis/client/dist/dialogs/authenticationDialog")
     }
+    f();
 }
-
-
-new Main().run();

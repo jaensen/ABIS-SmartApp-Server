@@ -1,16 +1,16 @@
-import {Sponsor_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/sponsor/_generated/sponsor_1_0_0";
-import {SideEffects as BaseSideEffects} from "../sideEffects";
-import {NeueSaison_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/saison/_generated/neueSaison_1_0_0";
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 import {Saison_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/saison/_generated/saison_1_0_0";
+import {NeueSaison_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/saison/_generated/neueSaison_1_0_0";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {NeuerSponsor_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/sponsor/_generated/neuerSponsor_1_0_0";
+import {Sponsor_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/sponsor/_generated/sponsor_1_0_0";
 import {NeueRessource_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/ressource/_generated/neueRessource_1_0_0";
 import {Ressource_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/ressource/_generated/ressource_1_0_0";
+import {SideEffects as BaseSideEffects} from "../sideEffects";
 import {NeuesProjekt_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/projekt/_generated/neuesProjekt_1_0_0";
 import {Projekt_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/projekt/_generated/projekt_1_0_0";
 import {NeuesBudget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/budget/_generated/neuesBudget_1_0_0";
 import {Budget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/budget/_generated/budget_1_0_0";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class SideEffects {
 

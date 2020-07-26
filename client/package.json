@@ -18,15 +18,16 @@
     "@graphql-codegen/typescript-document-nodes": "^1.15.1",
     "@graphql-codegen/typescript-graphql-request": "^1.15.1",
     "@graphql-codegen/typescript-operations": "^1.15.1",
-    "browserify": "^16.5.1"
+    "browserify": "^16.5.1",
+    "tsify": "^4.0.2",
+    "browserify-derequire": "^1.0.1"
   },
   "dependencies": {
-    "@abis/types": "../types",
-    "@abis/interfaces": "../interfaces",
     "@abis/dialog": "../dialog",
-    "@abis/log": "../log",
     "@abis/events": "../events",
-    "ix": "^3.0.2",
+    "@abis/interfaces": "../interfaces",
+    "@abis/log": "../log",
+    "@abis/types": "../types",
     "@types/graphql": "^14.5.0",
     "@types/ws": "^7.2.5",
     "apollo-cache-inmemory": "^1.6.6",
@@ -37,8 +38,10 @@
     "cross-fetch": "^3.0.4",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
+    "ix": "^3.0.2",
+    "jsonwebtoken": "^8.5.1",
     "subscriptions-transport-ws": "^0.9.16",
-    "ws": "^7.3.0",
-    "jsonwebtoken": "^8.5.1"
+    "tslib": "^2.0.0",
+    "ws": "^7.3.0"
   }
 }

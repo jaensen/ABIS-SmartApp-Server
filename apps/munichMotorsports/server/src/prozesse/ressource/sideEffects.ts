@@ -1,10 +1,10 @@
+import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
+import {Ressource_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/ressource/_generated/ressource_1_0_0";
+import {Budget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/budget/_generated/budget_1_0_0";
 import {SpeiseBudget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/ressource/_generated/speiseBudget_1_0_0";
 import {NeueBuchung_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/prozesse/budget/_generated/neueBuchung_1_0_0";
 import {SchemaTypes} from "@abis/types/dist/schemas/_generated/schemaTypes";
 import {SideEffects as BaseSideEffects} from "../sideEffects";
-import {Ressource_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/ressource/_generated/ressource_1_0_0";
-import {Budget_1_0_0} from "@abis/types/dist/schemas/munichMotorsports/types/_lib/budget/_generated/budget_1_0_0";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 
 export class SideEffects
 {
