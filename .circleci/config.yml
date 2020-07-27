@@ -26,7 +26,6 @@ jobs:
             - run: cd apps/abis/server && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd apps/munichMotorsports/server && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
-            - run: cd client && npx browserify src/main.ts --debug -p [ tsify --noImplicitAny -p tsconfig.json ] -p browserify-derequire > dist/bundle.js
             - run: cd electron-app/app && rm -f package-lock.json && rm -r -f dist && npm install && npx ng build
             - run: cd electron-app && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
 
