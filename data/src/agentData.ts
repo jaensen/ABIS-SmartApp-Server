@@ -103,16 +103,18 @@ export class Close implements IClose
 {
     private readonly _sessionRepo: SessionRepo;
     private readonly _agentRepo: AgentRepo;
+    private readonly _groupRepo: GroupRepo;
 
-    constructor(sessionRepo: SessionRepo, agentRepo: AgentRepo)
+    constructor(sessionRepo: SessionRepo, agentRepo: AgentRepo, groupRepo: GroupRepo)
     {
         this._sessionRepo = sessionRepo;
         this._agentRepo = agentRepo;
+        this._groupRepo = groupRepo;
     }
 
-    channel(jwt: string, channelId: number): Promise<void>
+    async channel(jwt: string, channelId: number): Promise<void>
     {
-        throw new Error("Not implemented!");
+        await this._groupRepo.closeChannel(jwt, channelId);
     }
 }
 
@@ -178,6 +180,6 @@ export class AgentData implements IAgentData
         this.findAgent = new FindAgent(this._sessionRepo, this._agentRepo);
         this.findGroup = new FindGroup(this, this._groupRepo);
         this.create = new Create(this, this._groupRepo);
-        this.close = new Close(this._sessionRepo, this._agentRepo);
+        this.close = new Close(this._sessionRepo, this._agentRepo, this._groupRepo);
     }
 }
