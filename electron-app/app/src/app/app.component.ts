@@ -28,7 +28,11 @@ export class AppComponent {
     const dialog = await abisClient.newDialog(
       authenticationAgent.id
       , false
-      , Class)
+      , Class);
+
+    await dialog.run();
+
+    console.log("[OK] authentication done.")
   }
 
   constructor()

@@ -346,7 +346,7 @@ export class Client implements IClient
                 //const impl = await import(implementation);
                 const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
                 const dialog = new implementation(duplexChannel, this._session?.jwt);
-                dialog.run();
+                // dialog.run();
                 resolve(dialog);
                 /*
             }*/
