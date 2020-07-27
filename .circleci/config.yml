@@ -24,7 +24,6 @@ jobs:
             - run: cd agents && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd server && rm -f package-lock.json && rm -r -f dist  && npm install && npm run generate && npx tsc
             - run: cd apps/abis/server && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
-            - run: cd apps/abis/client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd apps/munichMotorsports/server && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && npx browserify src/main.ts --debug -p [ tsify --noImplicitAny -p tsconfig.json ] -p browserify-derequire > dist/bundle.js
