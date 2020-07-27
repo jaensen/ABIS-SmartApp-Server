@@ -10,8 +10,11 @@ jobs:
       - node/with-cache:
           steps:
             - run: cd types && rm -f package-lock.json && rm -r -f dist && npm install && npx tsc
-            - run: cd log && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd log && rm -f package-lock.json && rm -r -f dist  && npm install && npx tscc
+            - run: cd node-helper && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd web-helper && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd interfaces && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd tools && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd data && rm -f package-lock.json && rm -r -f dist  && npm install
             - run: cd data/src && npx prisma generate
             - run: cd data && npx tsc
@@ -24,6 +27,8 @@ jobs:
             - run: cd apps/munichMotorsports/server && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd client && npx browserify src/main.ts --debug -p [ tsify --noImplicitAny -p tsconfig.json ] -p browserify-derequire > dist/bundle.js
+            - run: cd electron-app/app && ng build
+            - run: cd electron-app && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
 
 workflows:
   build-and-test:

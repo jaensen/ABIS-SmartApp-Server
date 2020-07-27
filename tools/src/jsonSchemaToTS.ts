@@ -1,7 +1,7 @@
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 import {compile} from 'json-schema-to-typescript'
 import * as fs from "fs";
-import {FsNode, Helper} from "./helper";
+import {FsNode, Helper} from "@abis/node-helper/dist/helper";
 import path from "path";
 
 const propertiesToObject = (obj:any) => {

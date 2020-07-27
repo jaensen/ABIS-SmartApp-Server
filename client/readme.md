@@ -20,14 +20,14 @@ await abisClient.connect();
 const server = await abisClient.myServer();
 const systemAgents = await server.systemAgents();
 
-// Loock for the 'authentication' Agent
+// Look for the 'authentication' Agent
 const authenticationAgent = systemAgents.find(o => o.name == "authentication");
 if (!authenticationAgent) {
     throw new Error("Couldn't find the 'authentication' agent on the server.")
 }
 
-// Run the client side 'Sign-in', 'Verify Email' and 'Login' workflow.
-// The workflow is specified in the given path (../dialogs/..). 
+// Run the client side 'Sign-in', 'Verify Email' and 'Login' dialog.
+// The dialog is specified in the given path (../dialogs/..). 
 const dialog = await abisClient.newDialog(
     authenticationAgent.id
     , false

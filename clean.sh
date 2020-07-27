@@ -15,6 +15,19 @@ rm -r -f dist
 npm install
 npx tsc
 
+cd ../web-helper || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+echo "declare module 'idtoken-verifier';" > node_modules/idtoken-verifier/build/idtoken-verifier.d.ts
+npx tsc
+
+cd ../node-helper || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+npx tsc
+
 cd ../interfaces || exit
 rm -f package-lock.json
 rm -r -f dist
@@ -37,6 +50,12 @@ npm install
 npx tsc
 
 cd ../dialog || exit
+rm -f package-lock.json
+rm -r -f dist
+npm install
+npx tsc
+
+cd ../tools || exit
 rm -f package-lock.json
 rm -r -f dist
 npm install
@@ -81,3 +100,4 @@ rm -f package-lock.json
 rm -r -f dist
 npm install
 npx tsc
+npx browserify src/main.ts --debug -p [ tsify --noImplicitAny -p tsconfig.json ] -p browserify-derequire > dist/bundle.js

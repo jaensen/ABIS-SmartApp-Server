@@ -21,7 +21,7 @@ import {WebSocketLink} from "apollo-link-ws";
 import {getMainDefinition} from 'apollo-utilities';
 import ws from "ws";
 import {fetch} from 'cross-fetch'
-import {Helper} from "@abis/interfaces/dist/helper";
+import {Helper} from "@abis/web-helper/dist/helper";
 import {
     NewEvent,
     NewEventSubscriptionVariables,
@@ -35,8 +35,8 @@ import {
     CreateSessionMutationVariables, CreateSession
 } from "./generated/abis-api";
 import {Dialog} from "@abis/dialog/dist/dialog";
-import {isBrowser} from "./main";
 
+export const isBrowser = typeof window !== "undefined";
 export type EventFilter<TEvent extends SchemaType> = (e: TEvent) => boolean;
 
 /**

@@ -1,6 +1,5 @@
-import {Client, ClientProxy} from "./client";
+import {Client, ClientProxy, isBrowser} from "./client";
 
-export const isBrowser = typeof window !== "undefined";
 
 if (isBrowser) {
     (<any>window).abisClient = new Promise<Client>(async (resolve, reject) => {

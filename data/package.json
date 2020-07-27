@@ -16,6 +16,7 @@
     "@abis/log": "../log",
     "@abis/interfaces": "../interfaces",
     "@abis/types": "../types",
+    "@abis/node-helper": "../node-helper",
     "jsonwebtoken": "^8.5.1"
   }
 }

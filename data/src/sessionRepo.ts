@@ -6,9 +6,7 @@ import {Session} from "./types/session";
 import {IEventPublisher} from "@abis/interfaces/dist/eventPublisher";
 import {Log} from "@abis/log/dist/log";
 import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives/_generated/session_1_0_0";
-import {Helper} from "@abis/interfaces/dist/helper";
-
-const jsonwebtoken = require('jsonwebtoken');
+import {Helper} from "@abis/node-helper/dist/helper";
 
 export class SessionRepo
 {
