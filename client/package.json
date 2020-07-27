@@ -29,7 +29,6 @@
     "@abis/web-helper": "../web-helper",
     "@abis/log": "../log",
     "@abis/types": "../types",
-    "@abis/apps.abis.client": "../apps/abis/client",
     "@types/graphql": "^14.5.0",
     "@types/ws": "^7.2.5",
     "apollo-cache-inmemory": "^1.6.6",
