@@ -323,7 +323,7 @@ export class Client implements IClient
 
     private readonly _dialogs: { [withAgentId: number]: IDuplexChannel } = {};
 
-    async newDialog(withAgentId: number, volatile: boolean, implementation: string)
+    async newDialog(withAgentId: number, volatile: boolean, implementation: any)
     {
         // TODO: Provide a way to simply pass in a factory that creates the instance
         if (!this._session)
@@ -334,7 +334,7 @@ export class Client implements IClient
         const req = <any>require;
 
         return new Promise<Dialog>((async resolve => {
-            if (isBrowser){
+            /*if (isBrowser){
                 const impl = req([implementation], async (result:any) => {
                     const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
                     const dialog = new result.Class(duplexChannel, this._session?.jwt);
@@ -342,12 +342,14 @@ export class Client implements IClient
                     resolve(dialog);
                 });
             } else {
-                const impl = await import(implementation);
+              */
+                //const impl = await import(implementation);
                 const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
-                const dialog = new impl.Class(duplexChannel, this._session?.jwt);
+                const dialog = new implementation(duplexChannel, this._session?.jwt);
                 dialog.run();
                 resolve(dialog);
-            }
+                /*
+            }*/
         }));
     }
 

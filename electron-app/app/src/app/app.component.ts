@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Client, ClientProxy} from "@abis/client/dist/client";
+import {Class} from "@abis/client/dist/dialogs/authenticationDialog";
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent {
     const dialog = await abisClient.newDialog(
       authenticationAgent.id
       , false
-      , "../../apps/abis/client/dist/dialogs/authenticationDialog")
+      , Class)
   }
 
   constructor()

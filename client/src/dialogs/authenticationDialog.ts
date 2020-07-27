@@ -10,7 +10,7 @@ import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_
 import {Challenge_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/challenge_1_0_0";
 import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
 
-class AuthenticationDialog extends Dialog
+export class AuthenticationDialog extends Dialog
 {
     constructor(duplexChannel: IDuplexChannel, session:Session_1_0_0)
     {
