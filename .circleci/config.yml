@@ -12,6 +12,7 @@ jobs:
             - run: cd types && rm -f package-lock.json && rm -r -f dist && npm install && npx tsc
             - run: cd log && rm -f package-lock.json && rm -r -f dist  && npm install && npx tscc
             - run: cd node-helper && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
+            - run: cd web-helper && echo "declare module 'idtoken-verifier';" > node_modules/idtoken-verifier/build/idtoken-verifier.d.ts
             - run: cd web-helper && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd interfaces && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
             - run: cd tools && rm -f package-lock.json && rm -r -f dist  && npm install && npx tsc
