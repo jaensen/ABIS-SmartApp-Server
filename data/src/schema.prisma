@@ -3,7 +3,7 @@
 
 datasource db {
     provider = "postgresql"
-    url      = "postgresql://postgres:abis@localhost:5432/abis?schema=public"
+    url      = "postgresql://abis:123@localhost:5432/abis?schema=public"
 }
 
 generator client {
