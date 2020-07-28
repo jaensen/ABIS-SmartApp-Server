@@ -6,3 +6,27 @@ query myServer {
         }
     }
 }
+
+query myProfile {
+    myProfile {
+        id
+        name
+        timezoneOffset
+        type
+        groups {
+            id
+            createdAt
+            name
+            type
+        }
+        memberships {
+            id
+            createdAt
+            group {
+                id
+                createdAt
+                name
+            }
+        }
+    }
+}

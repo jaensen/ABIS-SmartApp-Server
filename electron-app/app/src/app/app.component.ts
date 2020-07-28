@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import {Client, ClientProxy} from "@abis/client/dist/client";
+import {Client, SystemAgent} from "@abis/client/dist/client";
 import {Class} from "@abis/client/dist/dialogs/authenticationDialog";
+import {AbisClientService} from "./abis-client.service";
+import {Agent} from "@abis/client/dist/generated/abis-api";
 
 @Component({
   selector: 'app-root',
@@ -10,33 +12,50 @@ import {Class} from "@abis/client/dist/dialogs/authenticationDialog";
 export class AppComponent {
   title = 'app';
 
-  async f() {
-    const clientProxy = new ClientProxy("localhost:4000");
-    await clientProxy.connect();
+  private _client:Client;
+  private _systemAgents:SystemAgent[];
+  private _myProfile:Agent;
 
-    const abisClient = new Client(clientProxy);
-    await abisClient.connect();
+  constructor(private abisClient:AbisClientService)
+  {
+    // TODO: Find a way to bundle that subscriptions
+    const self = this;
+    this.abisClient.client.subscribe(async next => {
+      if (!next) return;
 
-    const server = await abisClient.myServer();
-    const systemAgents = await server.systemAgents();
+      this._client = next;
+      await this.init(this._client, this._myProfile, this._systemAgents);
+    });
+    this.abisClient.systemAgents.subscribe(async next => {
+      if (next.length == 0) return;
 
-    const authenticationAgent = systemAgents.find(o => o.name == "authentication");
+      this._systemAgents = next;
+      await this.init(this._client, this._myProfile, this._systemAgents);
+    });
+    this.abisClient.myProfile.subscribe(async next => {
+      if (!next) return;
+
+      this._myProfile = next;
+      await this.init(this._client, this._myProfile, this._systemAgents);
+    });
+  }
+
+  async init(client:Client, myProfile:Agent, agents:SystemAgent[])
+  {
+    if (!client || !myProfile || !agents || agents.length == 0) {
+      return;
+    }
+
+    const authenticationAgent = agents.find(o => o.name == "authentication");
     if (!authenticationAgent) {
       throw new Error("Couldn't find the 'authentication' agent on the server.")
     }
 
-    const dialog = await abisClient.newDialog(
+    const dialog = await this.abisClient.newDialog(
       authenticationAgent.id
       , false
       , Class);
 
-    await dialog.run();
-
-    console.log("[OK] authentication done.")
-  }
-
-  constructor()
-  {
-    this.f();
+    dialog.run().then(r => console.log("Auth dialog finished."));
   }
 }

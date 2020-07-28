@@ -206,6 +206,28 @@ export type MyServerQuery = (
   ) }
 );
 
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyProfileQuery = (
+  { __typename?: 'Query' }
+  & { myProfile: (
+    { __typename?: 'Agent' }
+    & Pick<Agent, 'id' | 'name' | 'timezoneOffset' | 'type'>
+    & { groups?: Maybe<Array<(
+      { __typename?: 'Group' }
+      & Pick<Group, 'id' | 'createdAt' | 'name' | 'type'>
+    )>>, memberships?: Maybe<Array<(
+      { __typename?: 'Membership' }
+      & Pick<Membership, 'id' | 'createdAt'>
+      & { group: (
+        { __typename?: 'Group' }
+        & Pick<Group, 'id' | 'createdAt' | 'name'>
+      ) }
+    )>> }
+  ) }
+);
+
 export type NewEventSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -238,6 +260,31 @@ export const MyServer = gql`
     systemAgents {
       id
       name
+    }
+  }
+}
+    `;
+export const MyProfile = gql`
+    query myProfile {
+  myProfile {
+    id
+    name
+    timezoneOffset
+    type
+    groups {
+      id
+      createdAt
+      name
+      type
+    }
+    memberships {
+      id
+      createdAt
+      group {
+        id
+        createdAt
+        name
+      }
     }
   }
 }

@@ -4,11 +4,11 @@ import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives
 import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
-import {AgentDialogContext} from "@abis/dialog/dist/agentDialogContext";
 import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
 import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/signup_1_0_0";
 import {Challenge_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/challenge_1_0_0";
 import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
+import {UiDialogContext} from "./UiDialogContext";
 
 export class AuthenticationDialog extends Dialog
 {
@@ -25,7 +25,7 @@ export class AuthenticationDialog extends Dialog
             | "challenge_sent"
             | "login_sent"
             | "authorized",
-            AgentDialogContext>();
+            UiDialogContext>();
 
         // TODO: Handle retries (Retry_1_0_0 events)
         builder
@@ -74,7 +74,7 @@ export class AuthenticationDialog extends Dialog
 
     private getUserInput(type: SchemaTypes)
     {
-        return function (p1: AgentDialogContext, p2: SchemaType, p3: SchemaType)
+        return function (p1: UiDialogContext, p2: SchemaType, p3: SchemaType)
         {
             return new Promise<SchemaType>((resolve, reject) => {
                 if (type == SchemaTypes.Signup_1_0_0) {

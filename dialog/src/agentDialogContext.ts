@@ -6,11 +6,13 @@ export class AgentDialogContext implements AgentDialogContext
 {
     close(): Promise<void>
     {
+        throw new Error("Not implemented");
         return Promise.resolve(undefined);
     }
 
     goto(state: string, seedEvent: SchemaType | undefined): Promise<void>
     {
+        throw new Error("Not implemented");
         return Promise.resolve(undefined);
     }
 

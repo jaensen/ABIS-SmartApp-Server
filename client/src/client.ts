@@ -32,7 +32,14 @@ import {
     MyServerQueryVariables,
     Server,
     CreateSessionMutation,
-    CreateSessionMutationVariables, CreateSession
+    CreateSessionMutationVariables,
+    CreateSession,
+    Agent,
+    MyProfile,
+    MyProfileQueryVariables,
+    AgentType,
+    Group,
+    Membership
 } from "./generated/abis-api";
 import {Dialog} from "@abis/dialog/dist/dialog";
 
@@ -83,6 +90,18 @@ export class ClientProxy
                 return (<any>agents.data).myServer.systemAgents;
             }
         }));
+    }
+
+    public get myProfile() : Promise<Agent>
+    {
+        const self = this;
+        return new Promise<Agent>(async (r) => {
+            const profileQueryResult = await self.client.query<Agent, MyProfileQueryVariables>({
+                query: MyProfile
+            })
+            const profileData = (<any>profileQueryResult.data).myProfile;
+            r(<Agent>profileData);
+        });
     }
 
     public constructor(host: string)
@@ -231,9 +250,11 @@ export class ClientProxy
     }
 }
 
+export type SystemAgent = {id:number, name:string};
+
 interface IServer
 {
-    systemAgents() : Promise<{id:number, name:string}[]>
+    systemAgents() : Promise<SystemAgent[]>
 }
 
 interface IClient
@@ -269,6 +290,8 @@ interface IClient
     newTimeout<T>(timeoutInMs: number): Promise<T>;
 
     myServer() : Promise<IServer>;
+
+    myProfile() : Promise<Agent>;
 }
 
 export class Client implements IClient
@@ -516,6 +539,11 @@ export class Client implements IClient
     async myServer() : Promise<IServer>
     {
         return this._proxy.myServer;
+    }
+
+    async myProfile() : Promise<Agent>
+    {
+        return this._proxy.myProfile;
     }
 
     newTimeout<T>(timeoutInMs: number, waitingFor?: string)

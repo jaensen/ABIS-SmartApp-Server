@@ -1,5 +1,6 @@
 import {
     Agent,
+    AgentType,
     CreateSessionResponse,
     MutationResolvers,
     QueryResolvers,
@@ -9,8 +10,8 @@ import {
 import {AbisServer} from "../core/abisServer";
 import {ConnectionContext} from "./connectionContext";
 import {Log} from "@abis/log/dist/log";
-import { from } from 'ix/asynciterable';
-import { filter, map } from 'ix/asynciterable/operators';
+import {from} from 'ix/asynciterable';
+import {map} from 'ix/asynciterable/operators';
 
 export class ApolloResolvers
 {
@@ -66,6 +67,7 @@ export class ApolloResolvers
             }
         };
 
+        // TODO: Add resolvers for edges
         this.queryResolvers = {
             myServer: async (parent: any, args: any, context: ConnectionContext) =>
             {
@@ -102,7 +104,7 @@ export class ApolloResolvers
                     id: agent.id,
                     name: agent.name,
                     createdAt: agent.createdAt,
-                    type: agent.type,
+                    type: AgentType.Profile,
                     timezoneOffset: agent.timezoneOffset
                 }
             }
