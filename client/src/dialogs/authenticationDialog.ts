@@ -4,11 +4,8 @@ import {Session_1_0_0} from "@abis/types/dist/schemas/abis/types/_lib/primitives
 import {Dialog} from "@abis/dialog/dist/dialog";
 import {IDuplexChannel} from "@abis/interfaces/dist/duplexChannel";
 import {DialogBuilder} from "@abis/dialog/dist/dialogBuilder";
-import {SchemaType} from "@abis/types/dist/schemas/_generated/schemaType";
-import {Signup_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/signup_1_0_0";
-import {Challenge_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/challenge_1_0_0";
-import {Login_1_0_0} from "@abis/types/dist/schemas/abis/types/authentication/_generated/login_1_0_0";
 import {UiDialogContext} from "./UiDialogContext";
+import {getUserInput} from "../sideEffects/getUserInput";
 
 export class AuthenticationDialog extends Dialog
 {
@@ -32,7 +29,7 @@ export class AuthenticationDialog extends Dialog
             .when("")
                 .onEnter()
                     .await(
-                        this.getUserInput(SchemaTypes.Signup_1_0_0)
+                        getUserInput(SchemaTypes.Signup_1_0_0)
                     ).onErrorRetry()
                     .sendResult()
                     .goto("signup_sent")
@@ -40,7 +37,7 @@ export class AuthenticationDialog extends Dialog
             .when("signup_sent")
                 .on<AskFor_1_0_0>(SchemaTypes.AskFor_1_0_0, e => e.next == SchemaTypes.Challenge_1_0_0)
                     .await(
-                        this.getUserInput(SchemaTypes.Challenge_1_0_0)
+                        getUserInput(SchemaTypes.Challenge_1_0_0)
                     ).onErrorRetry()
                     .sendResult()
                     .goto("challenge_sent")
@@ -53,7 +50,7 @@ export class AuthenticationDialog extends Dialog
                     .goto("authorized")
                 .on<AskFor_1_0_0>(SchemaTypes.AskFor_1_0_0, e => e.next == SchemaTypes.Login_1_0_0)
                     .await(
-                        this.getUserInput(SchemaTypes.Login_1_0_0)
+                        getUserInput(SchemaTypes.Login_1_0_0)
                     ).onErrorRetry()
                     .sendResult()
                     .goto("login_sent")
@@ -70,38 +67,6 @@ export class AuthenticationDialog extends Dialog
                     .close();
 
         return builder.build();
-    }
-
-    private getUserInput(type: SchemaTypes)
-    {
-        return function (p1: UiDialogContext, p2: SchemaType, p3: SchemaType)
-        {
-            return new Promise<SchemaType>((resolve, reject) => {
-                if (type == SchemaTypes.Signup_1_0_0) {
-                    resolve(<Signup_1_0_0>{
-                        _$schemaId: SchemaTypes.Signup_1_0_0,
-                        email: "hans@peter.de",
-                        password: "123",
-                        passwordConfirmation: "123",
-                        firstName: "Hans",
-                        lastName: "Peter",
-                        timezoneOffset: -120
-                    });
-                } else if (type == SchemaTypes.Challenge_1_0_0) {
-                    resolve(<Challenge_1_0_0>{
-                        _$schemaId: SchemaTypes.Challenge_1_0_0,
-                        code: "123"
-                    });
-                } else if (type == SchemaTypes.Login_1_0_0) {
-                    resolve(<Login_1_0_0>{
-                        _$schemaId: SchemaTypes.Login_1_0_0,
-                        email: "hans@peter.de",
-                        password: "123"
-                    });
-                }
-                throw new Error("")
-            });
-        };
     }
 }
 

@@ -23,23 +23,20 @@ import ws from "ws";
 import {fetch} from 'cross-fetch'
 import {Helper} from "@abis/web-helper/dist/helper";
 import {
+    Agent,
+    CreateSession,
+    CreateSessionMutation,
+    CreateSessionMutationVariables,
+    MyProfile,
+    MyProfileQueryVariables,
+    MyServer,
+    MyServerQueryVariables,
     NewEvent,
     NewEventSubscriptionVariables,
     Send,
     SendMutation,
     SendMutationVariables,
-    MyServer,
-    MyServerQueryVariables,
-    Server,
-    CreateSessionMutation,
-    CreateSessionMutationVariables,
-    CreateSession,
-    Agent,
-    MyProfile,
-    MyProfileQueryVariables,
-    AgentType,
-    Group,
-    Membership
+    Server
 } from "./generated/abis-api";
 import {Dialog} from "@abis/dialog/dist/dialog";
 
@@ -192,7 +189,7 @@ export class ClientProxy
 
         const session = this._session;
 
-        return new Promise<void>((resolve, reject) =>
+        return new Promise<void>((resolve) =>
         {
             this._eventsSubscription = this.client.subscribe<NewEventSubscriptionVariables>({
                 query: NewEvent
@@ -271,6 +268,7 @@ interface IClient
      * Creates a new DuplexChannel between the current agent (identified by its session)
      * and the specified other agent.
      * @param withAgentId The other agent.
+     * @param volatile
      */
     newDuplexChannel(withAgentId: number, volatile: boolean): Promise<IDuplexChannel>;
 
@@ -317,7 +315,7 @@ export class Client implements IClient
         this._session = this._proxy.session;
         this._events = this._proxy.subscribeTo();
 
-        this.run();
+        this.run().then(() => console.log("ABIS Client connected."));
     }
 
     disconnect()
@@ -344,35 +342,17 @@ export class Client implements IClient
         Log.log("Client", "Stopped client");
     }
 
-    private readonly _dialogs: { [withAgentId: number]: IDuplexChannel } = {};
-
     async newDialog(withAgentId: number, volatile: boolean, implementation: any)
     {
-        // TODO: Provide a way to simply pass in a factory that creates the instance
         if (!this._session)
         {
             throw new Error("Call connect() first.")
         }
 
-        const req = <any>require;
-
         return new Promise<Dialog>((async resolve => {
-            /*if (isBrowser){
-                const impl = req([implementation], async (result:any) => {
-                    const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
-                    const dialog = new result.Class(duplexChannel, this._session?.jwt);
-                    dialog.run();
-                    resolve(dialog);
-                });
-            } else {
-              */
-                //const impl = await import(implementation);
-                const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
-                const dialog = new implementation(duplexChannel, this._session?.jwt);
-                // dialog.run();
-                resolve(dialog);
-                /*
-            }*/
+            const duplexChannel = await this.newDuplexChannel(withAgentId, volatile);
+            const dialog = new implementation(duplexChannel, this._session?.jwt);
+            resolve(dialog);
         }));
     }
 
@@ -380,6 +360,7 @@ export class Client implements IClient
      * Creates a new DuplexChannel between the current agent (identified by its session)
      * and the specified other agent.
      * @param withAgentId The other agent.
+     * @param volatile
      */
     async newDuplexChannel(withAgentId: number, volatile: boolean)
     {
@@ -399,7 +380,7 @@ export class Client implements IClient
 
         const self = this;
 
-        return new Promise<IDuplexChannel>(async (resolve, reject) =>
+        return new Promise<IDuplexChannel>(async (resolve) =>
         {
             this.receive<NewGroup_1_0_0>(
                 SchemaTypes.NewGroup_1_0_0,
@@ -448,11 +429,9 @@ export class Client implements IClient
 
                             await self.send(createEntry);
 
-                            const response = await self.receive<NewEntry_1_0_0>(
+                            return await self.receive<NewEntry_1_0_0>(
                                 SchemaTypes.NewEntry_1_0_0,
                                 e => e.groupId == previous.createdOutChannel.id);
-
-                            return response;
                         },
                         async close()
                         {
